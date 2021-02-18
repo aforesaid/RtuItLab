@@ -11,15 +11,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Purchases", "Purchases", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shops", "Shops", "{B221AD20-6B91-41E4-A74B-F9C12ED47983}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Factories.API", "Factories.API\Factories.API.csproj", "{C5558166-3AE6-4CBC-910D-F43FBACB5DFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Factories.API", "Factories.API\Factories.API.csproj", "{C5558166-3AE6-4CBC-910D-F43FBACB5DFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Purchases.API", "Purchases.API\Purchases.API.csproj", "{23CE56D1-B734-48D0-803E-C2652462BD07}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Purchases.API", "Purchases.API\Purchases.API.csproj", "{23CE56D1-B734-48D0-803E-C2652462BD07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shops.API", "Shops.API\Shops.API.csproj", "{D9707FF6-C6BF-47DA-93A8-FEE6ABE79286}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shops.API", "Shops.API\Shops.API.csproj", "{D9707FF6-C6BF-47DA-93A8-FEE6ABE79286}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{E04B59F8-D9F8-4C09-95E6-79532CD51396}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.API", "Identity.API\Identity.API.csproj", "{24AF1457-6822-46B1-BE65-503E1523D299}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.API", "Identity.API\Identity.API.csproj", "{24AF1457-6822-46B1-BE65-503E1523D299}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
