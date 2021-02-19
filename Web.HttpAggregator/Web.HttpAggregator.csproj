@@ -11,7 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <Folder Include="Models\DTOs\Identity\" />
+    <Folder Include="Models\DTOs\Purchases\" />
+    <Folder Include="Models\DTOs\Shop\" />
   </ItemGroup>
 
 
