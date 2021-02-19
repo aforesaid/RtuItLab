@@ -21,6 +21,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{E0
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.API", "Identity.API\Identity.API.csproj", "{24AF1457-6822-46B1-BE65-503E1523D299}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "APIGateways", "APIGateways", "{BCF503D9-CFCA-4F01-8DC1-C0233871AD5D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.HttpAggregator", "Web.HttpAggregator\Web.HttpAggregator.csproj", "{3A932DFE-4C0E-41ED-A4C5-920FC737CBC0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +47,10 @@ Global
 		{24AF1457-6822-46B1-BE65-503E1523D299}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24AF1457-6822-46B1-BE65-503E1523D299}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24AF1457-6822-46B1-BE65-503E1523D299}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A932DFE-4C0E-41ED-A4C5-920FC737CBC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A932DFE-4C0E-41ED-A4C5-920FC737CBC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A932DFE-4C0E-41ED-A4C5-920FC737CBC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A932DFE-4C0E-41ED-A4C5-920FC737CBC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +64,7 @@ Global
 		{D9707FF6-C6BF-47DA-93A8-FEE6ABE79286} = {B221AD20-6B91-41E4-A74B-F9C12ED47983}
 		{E04B59F8-D9F8-4C09-95E6-79532CD51396} = {6C5CF5AA-0360-4075-B881-92C86659EE44}
 		{24AF1457-6822-46B1-BE65-503E1523D299} = {E04B59F8-D9F8-4C09-95E6-79532CD51396}
+		{3A932DFE-4C0E-41ED-A4C5-920FC737CBC0} = {BCF503D9-CFCA-4F01-8DC1-C0233871AD5D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3EB12B11-F167-4E79-936F-7464BD2D67CB}

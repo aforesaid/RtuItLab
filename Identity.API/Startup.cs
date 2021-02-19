@@ -23,14 +23,13 @@ namespace Identity.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(option =>
-                                                            option.UseSqlServer("Server=localhost\\MSSQLSERVER01;Initial Catalog=Identity;Trusted_Connection=True;"));
+                                                            option.
+                                                                UseSqlServer("Server=localhost\\MSSQLSERVER01;Initial Catalog=Identity;Trusted_Connection=True;"));
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-                {
-                    options.Password.RequiredLength         = 8;
-                    options.Password.RequireNonAlphanumeric = false;
-                })
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            {
+                options.Password.RequiredLength         = 8;
+                options.Password.RequireNonAlphanumeric = false;
+            }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
             services.AddControllers();
         }
 
