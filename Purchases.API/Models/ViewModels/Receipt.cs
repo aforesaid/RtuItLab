@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Purchases.API.Models.ViewModels
 {
     public class Receipt
     {
-        [Required]
-        public List<Product> Products { get; set; }
         [Required]
         public int ShopId { get; set; }
         [Required]

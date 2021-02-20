@@ -15,7 +15,7 @@ namespace Purchases.API.Models.ContextModels
         public List<ProductContext> Products { get; set; }
         public DateTime Date { get; set; }
         public TransactionTypes TransactionType { get; set; } = TransactionTypes.IN_CASH;
-        public bool IsUserCreate { get; set; }
+        public bool IsShopCreate { get; set; }
         public ReceiptContext Receipt { get; set; }
 
     }
