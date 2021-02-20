@@ -8,7 +8,9 @@ namespace Purchases.API.Services
     {
         public Task<Transaction> GetTransactionById(int id);
         public Task<ICollection<Transaction>> GetTransactions();
-        public Task<(string,bool)> AddTransaction(Transaction transaction);
-        public Task<string> UpdateTransaction(Transaction transaction);
+        //TODO: в строке возврщатаь id транзакции
+        public Task<string> AddTransaction(Transaction transaction);
+        //TODO: возвращать false, если пробуют изменить транзакцию магазина (не соблюдение правил)
+        public Task<(string,bool)> UpdateTransaction(UpdateTransaction transaction);
     }
 }

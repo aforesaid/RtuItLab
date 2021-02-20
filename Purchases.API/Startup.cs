@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Purchases.API.Data;
+using Purchases.API.Helpers;
 using Purchases.API.Services;
 
 namespace Purchases.API
@@ -33,7 +34,7 @@ namespace Purchases.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
-               
+            app.UseMiddleware<UserMiddleware>();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }

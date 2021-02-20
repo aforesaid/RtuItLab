@@ -2,11 +2,14 @@
 using Purchases.API.Models.ViewModels;
 using Purchases.API.Services;
 using System.Threading.Tasks;
+using Purchases.API.Helpers;
 
 namespace Purchases.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
+    //TODO: добавить миддлвеер для авторизации с кроликом
     public class PurchasesController : ControllerBase
     {
         private readonly IPurchasesService _purchasesService;
@@ -15,20 +18,20 @@ namespace Purchases.API.Controllers
             _purchasesService = purchasesService;
         }
         [HttpGet("{userid}/{id}")]
-        public async Task<IActionResult> GetHistory(string id,[FromBody] string userId)
+        public async Task<IActionResult> GetHistory(string id)
         {
             //TODO: проверить работает ли, когда Id пустой
             if (id != null && !int.TryParse(id, out _))
                 return BadRequest($"Invalid id: {id}");
-            return id is null ? Ok(await _purchasesService.GetTransactions(userId)) 
-                : Ok(await _purchasesService.GetTransactionById(userId, int.Parse(id)));
+            return id is null ? Ok(await _purchasesService.GetTransactions()) 
+                : Ok(await _purchasesService.GetTransactionById(int.Parse(id)));
         }
         [HttpPost("{userid}")]
-        public async Task<IActionResult> AddTransaction([FromBody] Transaction transaction, string userId)
+        public async Task<IActionResult> AddTransaction([FromBody] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
-                var response = await _purchasesService.AddTransaction(userId, transaction);
+                var response = await _purchasesService.AddTransaction(transaction);
                 return Ok(response);
             }
             return BadRequest("Invalid request");
@@ -38,12 +41,12 @@ namespace Purchases.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPut("{userid}")]
-        public async Task<IActionResult> UpdateTransaction(string userId, [FromBody] UpdateTransaction updateTransaction)
+        public async Task<IActionResult> UpdateTransaction( [FromBody] UpdateTransaction updateTransaction)
         {
             if (ModelState.IsValid)
             {
-                var (content, successed) = await _purchasesService.UpdateTransaction(userId, updateTransaction);
-                if (successed)
+                var (content, isSuccess) = await _purchasesService.UpdateTransaction(updateTransaction);
+                if (isSuccess)
                     return Ok(content);
                 return Forbid(content);
             }
