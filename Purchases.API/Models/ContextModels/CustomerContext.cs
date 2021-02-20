@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Purchases.API.Models.ContextModels
 {
-    public class Customer
+    public class CustomerContext
     {
         [Key]
         public int Id { get; set; }
-        public List<Transaction> Transactions { get; set; }
+        public List<TransactionContext> Transactions { get; set; }
     }
 }

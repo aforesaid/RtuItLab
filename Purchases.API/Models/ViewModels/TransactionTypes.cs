@@ -1,4 +1,4 @@
-﻿namespace Purchases.API.Models.ContextModels
+﻿namespace Purchases.API.Models.ViewModels
 {
     public enum TransactionTypes
     {

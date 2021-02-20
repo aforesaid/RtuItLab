@@ -1,22 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Purchases.API.Models.ViewModels;
 
 namespace Purchases.API.Models.ContextModels
 {
-    public class Transaction
+    public class TransactionContext 
     {
         [Key]
         public int Id { get; set; }
         [ForeignKey("CustomerKey")]
         public int CustomerKey { get; set; }
+        public List<Product> Products { get; set; }
         public DateTime Date { get; set; }
-        public string Name { get; set; }
-        public decimal Cost { get; set; }
-        public TransactionTypes TransactionType { get; set; }
+        public TransactionTypes TransactionType { get; set; } = TransactionTypes.IN_CASH;
         public bool IsUserCreate { get; set; }
-        public string Category { get; set; }
-        public Receipt Receipt { get; set; } 
-        
+        public ReceiptContext Receipt { get; set; }
+
     }
 }

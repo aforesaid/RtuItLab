@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Purchases.API.Data;
+using Purchases.API.Services;
 
 namespace Purchases.API
 {
@@ -18,6 +21,9 @@ namespace Purchases.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddDbContext<PurchasesDbContext>(
+                                                      option => option.UseInMemoryDatabase("purchases"));
+            services.AddScoped<IPurchasesService, PurchasesService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -27,9 +33,7 @@ namespace Purchases.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseAuthorization();
-
+               
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }

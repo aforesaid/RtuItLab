@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Purchases.API.Services;
 
 namespace Purchases.API.Controllers
 {
@@ -8,10 +9,11 @@ namespace Purchases.API.Controllers
     [ApiController]
     public class PurchasesController : ControllerBase
     {
-        /// <summary>
-        /// Получить список покупок
-        /// </summary>
-        /// <returns></returns>
+        private readonly IPurchasesService _purchasesService;
+        public PurchasesController(IPurchasesService purchasesService)
+        {
+            _purchasesService = purchasesService;
+        }
         [HttpGet]
         public async Task<ICollection<string>> GetHistory()
         {

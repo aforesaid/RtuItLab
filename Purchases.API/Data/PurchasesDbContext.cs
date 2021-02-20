@@ -10,6 +10,6 @@ namespace Purchases.API.Data
         {
             
         }
-        public DbSet<Customer> Customers { get; set; }
+        public DbSet<CustomerContext> Customers { get; set; }
     }
 }
