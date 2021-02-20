@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Purchases.API.Models.ViewModels;
 using Purchases.API.Services;
 using System.Threading.Tasks;
@@ -18,6 +17,7 @@ namespace Purchases.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetHistory(string id)
         {
+            //TODO: проверить работает ли, когда Id пустой
             if (id != null && !int.TryParse(id, out _))
                 return BadRequest($"Invalid id: {id}");
             return id is null ? Ok(await _purchasesService.GetTransactions()) 
@@ -38,9 +38,16 @@ namespace Purchases.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        public async Task<string> UpdateTransaction([])
+        public async Task<IActionResult> UpdateTransaction([FromBody] UpdateTransaction updateTransaction)
         {
-            return null;
+            if (ModelState.IsValid)
+            {
+                var (content, successed) = await _purchasesService.UpdateTransaction(updateTransaction);
+                if (successed)
+                    return Ok(content);
+                return Forbid(content);
+            }
+            return BadRequest("Invalid request");
         }
     }
 }
