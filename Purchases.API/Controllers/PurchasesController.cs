@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Purchases.API.Models.ViewModels;
 using Purchases.API.Services;
 
 namespace Purchases.API.Controllers
@@ -14,8 +15,8 @@ namespace Purchases.API.Controllers
         {
             _purchasesService = purchasesService;
         }
-        [HttpGet]
-        public async Task<ICollection<string>> GetHistory()
+        [HttpGet("{id}")]
+        public async Task<ICollection<string>> GetHistory(string id)
         {
             return null;
         }
@@ -24,8 +25,13 @@ namespace Purchases.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<string> AddTransaction()
+        public async Task<string> AddTransaction([FromBody] Transaction transaction)
         {
+            if (ModelState.IsValid)
+            {
+
+
+            }
             return null;
         }
         /// <summary>
@@ -37,17 +43,5 @@ namespace Purchases.API.Controllers
         {
             return null;
         }
-        /// <summary>
-        /// Получить определенную транзакцию
-        /// </summary>
-        /// <param name="transationId"></param>
-        /// <returns></returns>
-
-        [HttpPost]
-        public async Task<string> GetTransaction(string transationId)
-        {
-            return null;
-        }
-
     }
 }

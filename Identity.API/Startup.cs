@@ -24,7 +24,7 @@ namespace Identity.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(option =>
-                                                            option.UseInMemoryDatabase("ku"));
+                                                            option.UseInMemoryDatabase("identity"));
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength         = 8;
