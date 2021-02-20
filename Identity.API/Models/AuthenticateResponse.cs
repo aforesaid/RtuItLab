@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Identity.API.Models
+﻿namespace Identity.API.Models
 {
     public class AuthenticateResponse
     {

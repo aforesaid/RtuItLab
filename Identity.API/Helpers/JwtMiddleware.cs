@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Identity.API.Models.DTOs;
 using Identity.API.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -25,11 +26,11 @@ namespace Identity.API.Helpers
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(' ').Last();
             if (token != null)
-                 AttachUserToContext(context, userService, token);
+                await AttachUserToContext(context, userService, token);
             await _next(context);
         }
 
-        private void AttachUserToContext(HttpContext context, IUserService userService, string token)
+        private async Task AttachUserToContext(HttpContext context, IUserService userService, string token)
         {
             try
             {
@@ -45,7 +46,7 @@ namespace Identity.API.Helpers
                 }, out var validatedToken);
                 var jwtToken = validatedToken as JwtSecurityToken;
                 var userId   = jwtToken?.Claims.First(item => item.Type == "id").Value;
-                context.Items["User"] = userService.GetUserById(userId);
+                context.Items["User"] = await userService.GetUserById(userId);
             }
             catch (Exception e)
             {

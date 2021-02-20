@@ -1,6 +1,7 @@
 using Identity.API.Data;
 using Identity.API.Helpers;
 using Identity.API.Models;
+using Identity.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -23,13 +24,13 @@ namespace Identity.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(option =>
-                                                            option.
-                                                                UseSqlServer("Server=localhost\\MSSQLSERVER01;Initial Catalog=Identity;Trusted_Connection=True;"));
+                                                            option.UseInMemoryDatabase("ku"));
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength         = 8;
                 options.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+            services.AddScoped<IUserService, UserService>();
             services.AddControllers();
         }
 

@@ -8,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Identity.API.Models.DTOs;
 
 namespace Identity.API.Services
 {
@@ -37,8 +38,16 @@ namespace Identity.API.Services
             return null;
         }
 
-        public async Task<ApplicationUser> GetUserById(string id)
-            => await _userManager.FindByIdAsync(id);
+        public async Task<UserDTO> GetUserById(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            var userDto = new UserDTO
+            {
+                Id = user.Id,
+                Username = user.UserName
+            };
+            return userDto;
+        } 
 
         private async Task<bool> ValidateUser(ApplicationUser user, string password)
             => await _signInManager.UserManager.CheckPasswordAsync(user, password);
