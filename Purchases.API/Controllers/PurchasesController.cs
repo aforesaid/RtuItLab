@@ -14,21 +14,21 @@ namespace Purchases.API.Controllers
         {
             _purchasesService = purchasesService;
         }
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetHistory(string id)
+        [HttpGet("{userid}/{id}")]
+        public async Task<IActionResult> GetHistory(string id,[FromBody] string userId)
         {
             //TODO: проверить работает ли, когда Id пустой
             if (id != null && !int.TryParse(id, out _))
                 return BadRequest($"Invalid id: {id}");
-            return id is null ? Ok(await _purchasesService.GetTransactions()) 
-                : Ok(await _purchasesService.GetTransactionById(int.Parse(id)));
+            return id is null ? Ok(await _purchasesService.GetTransactions(userId)) 
+                : Ok(await _purchasesService.GetTransactionById(userId, int.Parse(id)));
         }
-        [HttpPost]
-        public async Task<IActionResult> AddTransaction([FromBody] Transaction transaction)
+        [HttpPost("{userid}")]
+        public async Task<IActionResult> AddTransaction([FromBody] Transaction transaction, string userId)
         {
             if (ModelState.IsValid)
             {
-                var response = await _purchasesService.AddTransaction(transaction);
+                var response = await _purchasesService.AddTransaction(userId, transaction);
                 return Ok(response);
             }
             return BadRequest("Invalid request");
@@ -37,12 +37,12 @@ namespace Purchases.API.Controllers
         /// Обновить транзакцию, если можно
         /// </summary>
         /// <returns></returns>
-        [HttpPut]
-        public async Task<IActionResult> UpdateTransaction([FromBody] UpdateTransaction updateTransaction)
+        [HttpPut("{userid}")]
+        public async Task<IActionResult> UpdateTransaction(string userId, [FromBody] UpdateTransaction updateTransaction)
         {
             if (ModelState.IsValid)
             {
-                var (content, successed) = await _purchasesService.UpdateTransaction(updateTransaction);
+                var (content, successed) = await _purchasesService.UpdateTransaction(userId, updateTransaction);
                 if (successed)
                     return Ok(content);
                 return Forbid(content);
