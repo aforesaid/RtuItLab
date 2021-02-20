@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Purchases.API.Models.ViewModels;
 using Purchases.API.Services;
+using System.Threading.Tasks;
 
 namespace Purchases.API.Controllers
 {
@@ -16,30 +16,29 @@ namespace Purchases.API.Controllers
             _purchasesService = purchasesService;
         }
         [HttpGet("{id}")]
-        public async Task<ICollection<string>> GetHistory(string id)
+        public async Task<IActionResult> GetHistory(string id)
         {
-            return null;
+            if (id != null && !int.TryParse(id, out _))
+                return BadRequest($"Invalid id: {id}");
+            return id is null ? Ok(await _purchasesService.GetTransactions()) 
+                : Ok(await _purchasesService.GetTransactionById(int.Parse(id)));
         }
-        /// <summary>
-        /// Добавить транзакцию
-        /// </summary>
-        /// <returns></returns>
         [HttpPost]
-        public async Task<string> AddTransaction([FromBody] Transaction transaction)
+        public async Task<IActionResult> AddTransaction([FromBody] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
-
-
+                var response = await _purchasesService.AddTransaction(transaction);
+                return Ok(response);
             }
-            return null;
+            return BadRequest("Invalid request");
         }
         /// <summary>
         /// Обновить транзакцию, если можно
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        public async Task<string> UpdateTransaction()
+        public async Task<string> UpdateTransaction([])
         {
             return null;
         }
