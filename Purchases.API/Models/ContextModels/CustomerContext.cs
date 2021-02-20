@@ -7,6 +7,7 @@ namespace Purchases.API.Models.ContextModels
     {
         [Key]
         public int Id { get; set; }
+        public string CustomerId { get; set; }
         public List<TransactionContext> Transactions { get; set; }
     }
 }
