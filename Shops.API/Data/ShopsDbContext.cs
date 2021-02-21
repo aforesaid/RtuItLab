@@ -10,6 +10,6 @@ namespace Shops.API.Data
         {
             
         }
-        public DbSet<Shop> Shops { get; set; }
+        public DbSet<ShopContext> Shops { get; set; }
     }
 }
