@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Purchases.API.Data;
-using Purchases.API.Models.DTOs;
-using Purchases.API.Models.ViewModels;
-using System.Threading.Tasks;
 using Purchases.API.Helpers;
 using Purchases.API.Models.ContextModels;
+using Purchases.API.Models.DTOs;
+using Purchases.API.Models.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Purchases.API.Services
 {
