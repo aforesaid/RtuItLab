@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Shops.API.Models.ContextModels
 {
-    public class Product
+    public class ProductContext
     {
         [Key]
         public int Id { get; set; }
