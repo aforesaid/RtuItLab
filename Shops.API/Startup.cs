@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Shops.API.Models.ViewModel;
+using Shops.API.Services;
 
 namespace Shops.API
 {
@@ -18,6 +20,7 @@ namespace Shops.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddScoped<IShopsService, ShopsService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
