@@ -52,7 +52,7 @@ namespace Shops.API.Services
                     return "BadRequest";
                 item.Count -= product.Count;
                 return "Success";
-            }).Any(item => item == "BadRequest");
+            }).Any(item => item != "BadRequest");
             if (!isSuccess) return "No product found";
             await _context.SaveChangesAsync();
             return "Success";
