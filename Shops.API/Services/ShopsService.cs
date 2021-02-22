@@ -57,5 +57,28 @@ namespace Shops.API.Services
             await _context.SaveChangesAsync();
             return "Success";
         }
+        //Кривой метод, пересмотреть ещё пару раз, найти аналог
+        public async Task<List<string>> AddProductsByFactory(ICollection<ProductByFactory> products)
+        {
+            var stringForLogging = new List<string>();
+            var shopsCollection  = products.GroupBy(item => item.ShopId);
+            shopsCollection.Select(async item =>
+            {
+                var shop = await _context.Shops.Include(item => item.Products)
+                    .FirstOrDefaultAsync(shop => shop.Id == item.Key);
+              var flag =  item.Select(product =>
+                {
+                    var productByContext =
+                        shop.Products?.FirstOrDefault(productContext => productContext.ProductId == product.ProductId);
+                    if (productByContext != null)
+                        productByContext.Count++;
+                    else
+                        stringForLogging.Add($"ProductId - {product.ProductId}, ShopId - {product.ShopId} not found in DbContext!");
+                    return true;
+                });
+                await _context.SaveChangesAsync();
+            });
+            return stringForLogging;
+        }
     }
 }

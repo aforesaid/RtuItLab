@@ -47,5 +47,14 @@ namespace Shops.API.Controllers
                 return Ok(response);
             return BadRequest(response);
         }
+
+        [HttpPost("updateProduct")]
+        public async Task<IActionResult> AddProducts([FromBody] ICollection<ProductByFactory> products)
+        {
+            if (!ModelState.IsValid) return BadRequest();
+            var response = await _shopsService.AddProductsByFactory(products);
+            return Ok(response);
+        }
+
     }
 }
