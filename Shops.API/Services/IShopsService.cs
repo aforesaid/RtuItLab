@@ -11,6 +11,6 @@ namespace Shops.API.Services
         public Task<ICollection<Product>> GetProductsByShop(int shopId);
         public Task<ICollection<Product>> GetProductsByCategory(int shopId, string categoryName);
         public Task<string> BuyProducts([FromBody] int shopId, [FromBody] ICollection<Product> products);
-        public Task<List<string>> AddProductsByFactory([FromBody] ICollection<ProductByFactory> products);
+        public Task AddProductsByFactory([FromBody] ICollection<ProductByFactory> products);
     }
 }

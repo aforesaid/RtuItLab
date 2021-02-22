@@ -57,34 +57,25 @@ namespace Shops.API.Services
             await _context.SaveChangesAsync();
             return "Success";
         }
-        //Кривой метод, пересмотреть ещё пару раз, найти аналог
-        public async Task<List<string>> AddProductsByFactory(ICollection<ProductByFactory> products)
+        public async Task AddProductsByFactory(ICollection<ProductByFactory> products)
         {
-            var stringForLogging = new List<string>();
             var shopsCollection  = products.GroupBy(item => item.ShopId);
             shopsCollection.ToList().ForEach(async item =>
             {
-              stringForLogging.AddRange(await AddProductsInShops(item.Key, item.ToList()));
+                await AddProductsInShop(item.Key, item.ToList());
             });
             await _context.SaveChangesAsync();
-            return stringForLogging;
         }
-
-        private async Task<ICollection<string>> AddProductsInShops(int shopId, List<ProductByFactory> products)
+        private async Task AddProductsInShop(int shopId, List<ProductByFactory> products)
         {
-            var exceptionByAdd = new List<string>();
             var shop = await _context.Shops.Include(item => item.Products)
                 .FirstOrDefaultAsync(shopContext => shopContext.Id == shopId);
             products.ForEach(product =>
             {
                 var productContext = shop.Products.FirstOrDefault(item => item.ProductId == product.ProductId);
-                if (productContext is null)
-                    exceptionByAdd.
-                        Add($"ShopId - {product.ShopId}, ProductId - {product.ProductId}, Count - {product.Count}");
-                else
+                if (productContext != null)
                     productContext.Count += product.Count;
             });
-            return exceptionByAdd;
         }
     }
 }

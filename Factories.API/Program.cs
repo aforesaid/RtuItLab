@@ -1,4 +1,6 @@
+using Factories.API.Services.BackgroundServices;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Factories.API
@@ -15,6 +17,10 @@ namespace Factories.API
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                })
+                .ConfigureServices(services =>
+                {
+                    services.AddHostedService<UpdateShopsTimedHostedService>();
                 });
     }
 }
