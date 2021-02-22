@@ -1,5 +1,8 @@
+using Factories.API.Data;
+using Factories.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,6 +21,9 @@ namespace Factories.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddDbContext<FactoriesDbContext>(options =>
+                                                          options.UseInMemoryDatabase("Factories"));
+            services.AddScoped<IFactoriesService, FactoriesService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
