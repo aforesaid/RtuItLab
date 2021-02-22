@@ -62,23 +62,29 @@ namespace Shops.API.Services
         {
             var stringForLogging = new List<string>();
             var shopsCollection  = products.GroupBy(item => item.ShopId);
-            shopsCollection.Select(async item =>
+            shopsCollection.ToList().ForEach(async item =>
             {
-                var shop = await _context.Shops.Include(item => item.Products)
-                    .FirstOrDefaultAsync(shop => shop.Id == item.Key);
-              var flag =  item.Select(product =>
-                {
-                    var productByContext =
-                        shop.Products?.FirstOrDefault(productContext => productContext.ProductId == product.ProductId);
-                    if (productByContext != null)
-                        productByContext.Count++;
-                    else
-                        stringForLogging.Add($"ProductId - {product.ProductId}, ShopId - {product.ShopId} not found in DbContext!");
-                    return true;
-                });
-                await _context.SaveChangesAsync();
+              stringForLogging.AddRange(await AddProductsInShops(item.Key, item.ToList()));
             });
+            await _context.SaveChangesAsync();
             return stringForLogging;
+        }
+
+        private async Task<ICollection<string>> AddProductsInShops(int shopId, List<ProductByFactory> products)
+        {
+            var exceptionByAdd = new List<string>();
+            var shop = await _context.Shops.Include(item => item.Products)
+                .FirstOrDefaultAsync(shopContext => shopContext.Id == shopId);
+            products.ForEach(product =>
+            {
+                var productContext = shop.Products.FirstOrDefault(item => item.ProductId == product.ProductId);
+                if (productContext is null)
+                    exceptionByAdd.
+                        Add($"ShopId - {product.ShopId}, ProductId - {product.ProductId}, Count - {product.Count}");
+                else
+                    productContext.Count += product.Count;
+            });
+            return exceptionByAdd;
         }
     }
 }
