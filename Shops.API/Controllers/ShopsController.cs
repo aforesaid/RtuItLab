@@ -4,6 +4,7 @@ using Shops.API.Services;
 using System.Threading.Tasks;
 using Shops.API.Helpers;
 using Shops.API.Models.ViewModel;
+using WebRabbitMQ;
 
 namespace Shops.API.Controllers
 {
@@ -12,19 +13,26 @@ namespace Shops.API.Controllers
     public class ShopsController : ControllerBase
     {
         private readonly IShopsService _shopsService;
+        private readonly IEventBus _eventBus;
 
-        public ShopsController(IShopsService shopsService)
+        public ShopsController(IShopsService shopsService,
+            IEventBus eventBus)
         {
             _shopsService = shopsService;
+            _eventBus     = eventBus;
         }
 
         [HttpGet("shops")]
         public IActionResult GetAllShops()
-            => Ok(_shopsService.GetAllShops());
+        {
+            _eventBus.Publish("Get Shops");
+            return Ok(_shopsService.GetAllShops());
+        }
 
         [HttpGet("shops/{id}")]
         public async Task<IActionResult> GetProducts(int shopId)
         {
+            _eventBus.Publish("Get Products by shop");
             var products = await _shopsService.GetProductsByShop(shopId);
             return Ok(products);
         }
@@ -32,6 +40,7 @@ namespace Shops.API.Controllers
         [HttpPost("shops/{id]/find_by_category")]
         public async Task<IActionResult> GetProductsByCategory(int shopId, [FromBody] string categoryName)
         {
+            _eventBus.Publish("Get Products by Category and Shop");
             if (!ModelState.IsValid) return BadRequest();
             var products = await _shopsService.GetProductsByCategory(shopId, categoryName);
             return Ok(products);
@@ -41,6 +50,7 @@ namespace Shops.API.Controllers
         [HttpPost("shops/{id}/order")]
         public async Task<IActionResult> BuyProducts(int shopId, [FromBody] ICollection<Product> products)
         {
+            _eventBus.Publish("Buy Products");
             if (!ModelState.IsValid) return BadRequest();
             var response = await _shopsService.BuyProducts(shopId, products);
             if (response == "Success")
@@ -51,6 +61,7 @@ namespace Shops.API.Controllers
         [HttpPost("updateProduct")]
         public async Task<IActionResult> AddProducts([FromBody] ICollection<ProductByFactory> products)
         {
+            _eventBus.Publish("Add products from factory");
             if (!ModelState.IsValid) return BadRequest();
                 await _shopsService.AddProductsByFactory(products);
             return Ok();
