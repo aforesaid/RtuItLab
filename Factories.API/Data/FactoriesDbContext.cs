@@ -10,6 +10,6 @@ namespace Factories.API.Data
         {
             
         }
-        public DbSet<Factory> Factories { get; set; }
+        public DbSet<FactoryContext> Factories { get; set; }
     }
 }

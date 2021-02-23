@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Factories.API.Models.ContextModels
 {
-    public class ProductByFactory
+    public class ProductByFactoryContext
     {
         [Key]
         public int Id { get; set; }
@@ -12,5 +12,6 @@ namespace Factories.API.Models.ContextModels
         public int ShopId { get; set; }
         public int ProductId { get; set; }
         public int TimeForCreate { get; set; } 
+        public int Count { get; set; }
     }
 }

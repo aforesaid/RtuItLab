@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Factories.API.Models.ContextModels
 {
-    public class Factory
+    public class FactoryContext
     {
         [Key]
         public int Id { get; set; }
-        public List<ProductByFactory> Products { get; set; }
+        public List<ProductByFactoryContext> Products { get; set; }
     }
 }

@@ -3,20 +3,12 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
+EXPOSE 7004
+COPY . .
+RUN dotnet build "Factories.API/Factories.API.csproj"
+RUN dotnet publish "Factories.API.csproj" -c Release -o /app/out
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
-WORKDIR /src
-COPY ["Factories.API/Factories.API.csproj", "Factories.API/"]
-RUN dotnet restore "Factories.API/Factories.API.csproj"
-COPY . .
-WORKDIR "/src/Factories.API"
-RUN dotnet build "Factories.API.csproj" -c Release -o /app/build
-
-FROM build AS publish
-RUN dotnet publish "Factories.API.csproj" -c Release -o /app/publish
-
-FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=base /app/out .
 ENTRYPOINT ["dotnet", "Factories.API.dll"]
