@@ -1,0 +1,34 @@
+version: '3.4'
+
+services:
+  apigateway:
+    image: apigateway
+    build:
+      context: .
+      dockerfile: ApiGateway/Dockerfile
+    ports:
+      - 5000
+  identityapi:
+        image: api/identityapi
+        build:
+            context: .
+            dockerfile: Identity.API/Dockerfile
+        ports:
+            - 7001
+  purchasesapi:
+        image: api/purchasesapi
+        build:
+            context: .
+            dockerfile: Purchases.API/Dockerfile
+        ports:
+            - 7002
+  shopsapi:
+        image: api/shops
+        build:
+            context: .
+            dockerfile: Shops.API/Dockerfile
+        ports:
+            - 7003
+
+        
+
