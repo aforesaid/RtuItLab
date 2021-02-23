@@ -3,20 +3,12 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
+EXPOSE 7001
+COPY . .
+RUN dotnet build "Identity.API/Identity.API.csproj"
+RUN dotnet publish "Identity.API.csproj" -c Release -o /app/out
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
-WORKDIR /src
-COPY ["Identity.API/Identity.API.csproj", "Identity.API/"]
-RUN dotnet restore "Identity.API/Identity.API.csproj"
-COPY . .
-WORKDIR "/src/Identity.API"
-RUN dotnet build "Identity.API.csproj" -c Release -o /app/build
-
-FROM build AS publish
-RUN dotnet publish "Identity.API.csproj" -c Release -o /app/publish
-
-FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=base /app/out .
 ENTRYPOINT ["dotnet", "Identity.API.dll"]
