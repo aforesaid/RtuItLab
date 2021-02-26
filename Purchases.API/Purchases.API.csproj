@@ -35,7 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Purchases.Domain\Purchases.Domain.csproj" />
-    <ProjectReference Include="..\ServicesDtoModels\RtuItLab.Infrastructure.csproj" />
+    <ProjectReference Include="..\RtuItLab.Infrastructure\RtuItLab.Infrastructure.csproj" />
   </ItemGroup>
 
 

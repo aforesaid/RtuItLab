@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Purchases.DAL\Purchases.DAL.csproj" />
-    <ProjectReference Include="..\ServicesDtoModels\RtuItLab.Infrastructure.csproj" />
+    <ProjectReference Include="..\RtuItLab.Infrastructure\RtuItLab.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
