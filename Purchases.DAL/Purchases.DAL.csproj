@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ServicesDtoModels\ServicesDtoModels.csproj" />
+    <ProjectReference Include="..\ServicesDtoModels\RtuItLab.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

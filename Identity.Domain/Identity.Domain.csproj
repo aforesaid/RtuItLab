@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Identity.DAL\Identity.DAL.csproj" />
-    <ProjectReference Include="..\ServicesDtoModels\ServicesDtoModels.csproj" />
+    <ProjectReference Include="..\ServicesDtoModels\RtuItLab.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

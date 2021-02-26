@@ -21,23 +21,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{E0
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.API", "Identity.API\Identity.API.csproj", "{24AF1457-6822-46B1-BE65-503E1523D299}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiGateway", "ApiGateway\ApiGateway.csproj", "{7BF8629A-093F-42AC-9BDD-4C3CF0EADE52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RtuItLab.ApiGateway", "ApiGateway\RtuItLab.ApiGateway.csproj", "{7BF8629A-093F-42AC-9BDD-4C3CF0EADE52}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{2F0E358A-FFB1-4E71-8E27-A9E0ED1E16E0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServicesDtoModels", "ServicesDtoModels\ServicesDtoModels.csproj", "{A47421B5-BD18-4707-8CB0-B9E8C2FB1EAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RtuItLab.Infrastructure", "ServicesDtoModels\RtuItLab.Infrastructure.csproj", "{A47421B5-BD18-4707-8CB0-B9E8C2FB1EAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Purchases.Domain", "Purchases.Domain\Purchases.Domain.csproj", "{9E0BD2C8-6603-431D-A7DC-2A7750F7B71B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Purchases.Domain", "Purchases.Domain\Purchases.Domain.csproj", "{9E0BD2C8-6603-431D-A7DC-2A7750F7B71B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Purchases.DAL", "Purchases.DAL\Purchases.DAL.csproj", "{0249B080-AF4A-49BD-8E0E-0436235DCB91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Purchases.DAL", "Purchases.DAL\Purchases.DAL.csproj", "{0249B080-AF4A-49BD-8E0E-0436235DCB91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.DAL", "Identity.DAL\Identity.DAL.csproj", "{8C2EFBE7-A961-4322-9812-6194D82588B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.DAL", "Identity.DAL\Identity.DAL.csproj", "{8C2EFBE7-A961-4322-9812-6194D82588B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Domain", "Identity.Domain\Identity.Domain.csproj", "{2992895C-3AF5-4148-96F4-3E3363DB5E8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Domain", "Identity.Domain\Identity.Domain.csproj", "{2992895C-3AF5-4148-96F4-3E3363DB5E8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shops.Domain", "..\Shops.Domain\Shops.Domain.csproj", "{3F359E1F-7156-42A0-A8A6-458FC15AA414}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shops.Domain", "..\Shops.Domain\Shops.Domain.csproj", "{3F359E1F-7156-42A0-A8A6-458FC15AA414}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shops.DAL", "..\Shops.DAL\Shops.DAL.csproj", "{4969FA8C-A565-40AC-B272-C8C05705064F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shops.DAL", "..\Shops.DAL\Shops.DAL.csproj", "{4969FA8C-A565-40AC-B272-C8C05705064F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

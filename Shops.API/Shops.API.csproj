@@ -21,7 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Shops.DAL\Shops.DAL.csproj" />
     <ProjectReference Include="..\..\Shops.Domain\Shops.Domain.csproj" />
-    <ProjectReference Include="..\ServicesDtoModels\ServicesDtoModels.csproj" />
+    <ProjectReference Include="..\ServicesDtoModels\RtuItLab.Infrastructure.csproj" />
   </ItemGroup>
 
 
