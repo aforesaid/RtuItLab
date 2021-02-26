@@ -1,15 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Purchases.API.Data;
-using Purchases.API.Helpers;
-using Purchases.API.Models.ContextModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Purchases.DAL.ContextModels;
+using Purchases.DAL.Data;
+using Purchases.Domain.Helpers;
 using ServicesDtoModels.Models.Identity;
 using ServicesDtoModels.Models.Purchases;
 
-namespace Purchases.API.Services
+namespace Purchases.Domain.Services
 {
     public class PurchasesService : IPurchasesService
     {

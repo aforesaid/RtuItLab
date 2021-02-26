@@ -1,9 +1,9 @@
 ﻿using System.Linq;
-using Purchases.API.Models.ContextModels;
+using Purchases.DAL.ContextModels;
 using ServicesDtoModels.Models.Purchases;
 using ServicesDtoModels.Models.Shop;
 
-namespace Purchases.API.Helpers
+namespace Purchases.Domain.Helpers
 {
     public static class TransactionDtoTransformers
     {

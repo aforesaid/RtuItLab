@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ServicesDtoModels\ServicesDtoModels.csproj" />
+    <ProjectReference Include="..\ServicesDtoModels\ServicesDtoModels.csproj" />
   </ItemGroup>
 
 

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +7,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Purchases.API.Data;
 using Purchases.API.Helpers;
-using Purchases.API.Services;
+using Purchases.Domain.Services;
+using System.Collections.Generic;
 
 namespace Purchases.API
 {

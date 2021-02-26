@@ -1,9 +1,9 @@
-﻿using ServicesDtoModels.Models.Identity;
-using ServicesDtoModels.Models.Purchases;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using ServicesDtoModels.Models.Identity;
+using ServicesDtoModels.Models.Purchases;
 
-namespace Purchases.API.Services
+namespace Purchases.Domain.Services
 {
     public interface IPurchasesService
     {

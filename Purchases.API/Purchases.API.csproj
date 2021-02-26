@@ -34,7 +34,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ServicesDtoModels\ServicesDtoModels.csproj" />
+    <ProjectReference Include="..\Purchases.Domain\Purchases.Domain.csproj" />
+    <ProjectReference Include="..\ServicesDtoModels\ServicesDtoModels.csproj" />
   </ItemGroup>
 
 

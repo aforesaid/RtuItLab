@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Purchases.API.Services;
 using System.Threading.Tasks;
 using Purchases.API.Helpers;
+using Purchases.Domain.Services;
 using ServicesDtoModels.Models.Identity;
 using ServicesDtoModels.Models.Purchases;
 
