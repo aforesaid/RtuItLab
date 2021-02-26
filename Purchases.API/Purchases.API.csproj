@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Requests\**" />
+    <Compile Remove="Models\Responses\**" />
+    <Content Remove="Models\Requests\**" />
+    <Content Remove="Models\Responses\**" />
+    <EmbeddedResource Remove="Models\Requests\**" />
+    <EmbeddedResource Remove="Models\Responses\**" />
+    <None Remove="Models\Requests\**" />
+    <None Remove="Models\Responses\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MassTransit.RabbitMQ" Version="7.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.3" />
@@ -23,12 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Requests\" />
-    <Folder Include="Models\Responses\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\WebRabbitMQ\WebRabbitMQ.csproj" />
+    <ProjectReference Include="..\..\ServicesDtoModels\ServicesDtoModels.csproj" />
   </ItemGroup>
 
 

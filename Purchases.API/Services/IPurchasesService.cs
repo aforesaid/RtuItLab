@@ -1,17 +1,17 @@
-﻿using Purchases.API.Models.ViewModels;
+﻿using ServicesDtoModels.Models.Identity;
+using ServicesDtoModels.Models.Purchases;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Purchases.API.Models.DTOs;
 
 namespace Purchases.API.Services
 {
     public interface IPurchasesService
     {
-        public Task<Transaction> GetTransactionById(UserDTO user, int id);
-        public Task<ICollection<Transaction>> GetTransactions(UserDTO user);
+        public Task<Transaction> GetTransactionById(User user, int id);
+        public Task<ICollection<Transaction>> GetTransactions(User user);
         //TODO: в строке возврщатаь id транзакции
-        public Task AddTransaction(UserDTO user, Transaction transaction);
+        public Task AddTransaction(User user, Transaction transaction);
         //TODO: возвращать false, если пробуют изменить транзакцию магазина (не соблюдение правил)
-        public Task<(string,bool)> UpdateTransaction(UserDTO user, UpdateTransaction transaction);
+        public Task<(string,bool)> UpdateTransaction(User user, UpdateTransaction transaction);
     }
 }

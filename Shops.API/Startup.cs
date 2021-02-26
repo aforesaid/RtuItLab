@@ -6,7 +6,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Shops.API.Services;
 using System.Collections.Generic;
-using WebRabbitMQ;
 
 namespace Shops.API
 {
@@ -59,11 +58,6 @@ namespace Shops.API
                     }
                 });
             });
-            services.AddSingleton<IEventBus, RabbitMQBus>(s =>
-            {
-                var lifeTime = s.GetRequiredService<IHostApplicationLifetime>();
-                return new RabbitMQBus(lifeTime);
-            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -77,8 +71,6 @@ namespace Shops.API
                                   c.SwaggerEndpoint("/swagger/v1/swagger.json", "Shops.API V1");
                               }
                              );
-            var component = app.ApplicationServices.GetRequiredService<IEventBus>();
-            component.Subscribe();
             app.UseRouting();
 
             app.UseAuthorization();

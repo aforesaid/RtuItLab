@@ -21,9 +21,5 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.0.7" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\WebRabbitMQ\WebRabbitMQ.csproj" />
-  </ItemGroup>
-
 
 </Project>

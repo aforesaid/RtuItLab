@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Purchases.API.Models.ViewModels;
+using ServicesDtoModels.Models.Purchases;
 
 namespace Purchases.API.Models.ContextModels
 {
@@ -15,7 +15,7 @@ namespace Purchases.API.Models.ContextModels
 
         public List<ProductContext> Products { get; set; } = new List<ProductContext>();
         public DateTime Date { get; set; }
-        public TransactionTypes TransactionType { get; set; } = TransactionTypes.IN_CASH;
+        public TransactionTypes TransactionType { get; set; } = TransactionTypes.InCash;
         public bool IsShopCreate { get; set; }
         public ReceiptContext Receipt { get; set; }
 

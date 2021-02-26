@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Shops.API.Models.ViewModel;
+using ServicesDtoModels.Models.Shop;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

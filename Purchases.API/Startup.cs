@@ -9,7 +9,6 @@ using Microsoft.OpenApi.Models;
 using Purchases.API.Data;
 using Purchases.API.Helpers;
 using Purchases.API.Services;
-using WebRabbitMQ;
 
 namespace Purchases.API
 {
@@ -64,11 +63,6 @@ namespace Purchases.API
                     }
                 });
             });
-            services.AddSingleton<IEventBus, RabbitMQBus>(s =>
-            {
-                var lifeTime = s.GetRequiredService<IHostApplicationLifetime>();
-                return new RabbitMQBus(lifeTime);
-            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -82,8 +76,6 @@ namespace Purchases.API
                                   c.SwaggerEndpoint("/swagger/v1/swagger.json", "Purchases.API V1");
                               }
                              );
-            var component = app.ApplicationServices.GetRequiredService<IEventBus>();
-            component.Subscribe();
             app.UseRouting();
             app.UseMiddleware<UserMiddleware>();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });

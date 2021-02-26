@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebRabbitMQ\WebRabbitMQ.csproj" />
+    <ProjectReference Include="..\..\ServicesDtoModels\ServicesDtoModels.csproj" />
   </ItemGroup>
 
 

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Purchases.API.Models.ContextModels;
-using Purchases.API.Models.ViewModels;
+using ServicesDtoModels.Models.Purchases;
+using ServicesDtoModels.Models.Shop;
 
 namespace Purchases.API.Helpers
 {

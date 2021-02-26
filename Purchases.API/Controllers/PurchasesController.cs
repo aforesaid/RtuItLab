@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Purchases.API.Models.ViewModels;
 using Purchases.API.Services;
 using System.Threading.Tasks;
 using Purchases.API.Helpers;
-using Purchases.API.Models.DTOs;
-using WebRabbitMQ;
+using ServicesDtoModels.Models.Identity;
+using ServicesDtoModels.Models.Purchases;
 
 namespace Purchases.API.Controllers
 {
@@ -15,18 +14,14 @@ namespace Purchases.API.Controllers
     public class PurchasesController : ControllerBase
     {
         private readonly IPurchasesService _purchasesService;
-        private readonly IEventBus _eventBus;
-        public PurchasesController(IPurchasesService purchasesService,
-            IEventBus eventBus)
+        public PurchasesController(IPurchasesService purchasesService)
         {
             _purchasesService = purchasesService;
-            _eventBus         = eventBus;
         }
         [HttpGet("{userid}/{id}")]
         public async Task<IActionResult> GetHistory(string id)
         {
-            _eventBus.Publish("History");
-            var user = HttpContext.Items["User"] as UserDTO;
+            var user = HttpContext.Items["User"] as User;
             //TODO: проверить работает ли, когда Id пустой
             if (id != null && !int.TryParse(id, out _))
                 return BadRequest($"Invalid id: {id}");
@@ -36,10 +31,9 @@ namespace Purchases.API.Controllers
         [HttpPost("{userid}")]
         public async Task<IActionResult> AddTransaction([FromBody] Transaction transaction)
         {
-            _eventBus.Publish("New Transaction");
             if (ModelState.IsValid)
             {
-                var user     = HttpContext.Items["User"] as UserDTO;
+                var user     = HttpContext.Items["User"] as User;
                 await _purchasesService.AddTransaction(user, transaction);
                 return Ok();
             }
@@ -52,10 +46,9 @@ namespace Purchases.API.Controllers
         [HttpPut("{userid}")]
         public async Task<IActionResult> UpdateTransaction( [FromBody] UpdateTransaction updateTransaction)
         {
-            _eventBus.Publish("Update Transaction");
             if (ModelState.IsValid)
             {
-                var user = HttpContext.Items["User"] as UserDTO;
+                var user = HttpContext.Items["User"] as User;
                 var (content, isSuccess) = await _purchasesService.UpdateTransaction(user, updateTransaction);
                 if (isSuccess)
                     return Ok();

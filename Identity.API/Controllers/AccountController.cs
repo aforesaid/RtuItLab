@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Identity.API.Models.DTOs;
-using WebRabbitMQ;
 
 namespace Identity.API.Controllers
 {
@@ -15,19 +14,15 @@ namespace Identity.API.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUserService _userService;
-        private readonly IEventBus _eventBus;
         public AccountController(UserManager<ApplicationUser> userManager,
-            IUserService userService,
-            IEventBus eventBus)
+            IUserService userService)
         {
             _userManager = userManager;
             _userService = userService;
-            _eventBus    = eventBus;
         }
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] AuthorizeModel model)
         {
-            _eventBus.Publish("Login");
             var applicationUser = new ApplicationUser()
             {
                 UserName = model.Login
@@ -49,8 +44,6 @@ namespace Identity.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] AuthorizeModel model)
         {
-            _eventBus.Publish("Register");
-
             var applicationUser = new ApplicationUser()
             {
                 UserName = model.Login
@@ -63,7 +56,6 @@ namespace Identity.API.Controllers
         [Authorize]
         public IActionResult GetUser()
         {
-            _eventBus.Publish("UserInfo");
             var user = HttpContext.Items["User"] as UserDTO;
             return Ok(user);
         }

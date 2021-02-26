@@ -11,8 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
-using WebRabbitMQ;
-
 namespace Identity.API
 {
     public class Startup
@@ -34,11 +32,7 @@ namespace Identity.API
                 options.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
             services.AddScoped<IUserService, UserService>();
-            services.AddSingleton<IEventBus, RabbitMQBus>(s =>
-            {
-                var lifeTime = s.GetRequiredService<IHostApplicationLifetime>();
-                return new RabbitMQBus(lifeTime);
-            });
+            //services.AddSingleton<IEventBus, RabbitMQBus>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -87,8 +81,6 @@ namespace Identity.API
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity.API V1");
                 });
-            var component = app.ApplicationServices.GetRequiredService<IEventBus>();
-            component.Subscribe();
             app.UseRouting();
             app.UseMiddleware<JwtMiddleware>();
 

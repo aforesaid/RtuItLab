@@ -21,9 +21,5 @@
     <Folder Include="Helpers\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\WebRabbitMQ\WebRabbitMQ.csproj" />
-  </ItemGroup>
-
 
 </Project>

@@ -2,12 +2,12 @@
 using Purchases.API.Data;
 using Purchases.API.Helpers;
 using Purchases.API.Models.ContextModels;
-using Purchases.API.Models.DTOs;
-using Purchases.API.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ServicesDtoModels.Models.Identity;
+using ServicesDtoModels.Models.Purchases;
 
 namespace Purchases.API.Services
 {
@@ -19,7 +19,7 @@ namespace Purchases.API.Services
             _context = context;
         }
 
-        public async Task<Transaction> GetTransactionById(UserDTO user, int id)
+        public async Task<Transaction> GetTransactionById(User user, int id)
         {
             var customer = await _context.Customers.Include(item => item.Transactions)
                                                    .ThenInclude(item => item.Products)
@@ -28,14 +28,14 @@ namespace Purchases.API.Services
             return transaction.ToTransactionDto();
         }
 
-        public async Task AddTransaction(UserDTO user, Transaction transaction)
+        public async Task AddTransaction(User user, Transaction transaction)
         {
             var customer = await _context.Customers.FirstOrDefaultAsync(item => item.CustomerId == user.Id);
             customer.Transactions.Add(transaction.ToTransactionContext());
             await _context.SaveChangesAsync();
         }
 
-        public async Task<(string, bool)> UpdateTransaction(UserDTO user, UpdateTransaction transaction)
+        public async Task<(string, bool)> UpdateTransaction(User user, UpdateTransaction transaction)
         {
             var customer = await _context.Customers.Include(item => item.Transactions)
                 .ThenInclude(item => item.Products)
@@ -46,7 +46,7 @@ namespace Purchases.API.Services
                 ? (null, true)
                 : (response, false);
         }
-        public async Task<ICollection<Transaction>> GetTransactions(UserDTO user)
+        public async Task<ICollection<Transaction>> GetTransactions(User user)
         {
             var customer = await _context.Customers.Include(item => item.Transactions)
                 .ThenInclude(item => item.Products)

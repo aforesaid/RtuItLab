@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Purchases.API.Models.DTOs;
 using System;
+using ServicesDtoModels.Models.Identity;
 
 namespace Purchases.API.Helpers
 {
@@ -11,7 +11,7 @@ namespace Purchases.API.Helpers
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            if (!(context.HttpContext.Items["User"] is UserDTO))
+            if (!(context.HttpContext.Items["User"] is User))
                 context.Result = new JsonResult(new { message = "Unauthorized"})
                     { StatusCode = StatusCodes.Status401Unauthorized };
         }

@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Http;
-using Purchases.API.Models.ContextModels;
-using Purchases.API.Models.ViewModels;
+﻿using Purchases.API.Models.ContextModels;
+using System.Linq;
+using ServicesDtoModels.Models.Purchases;
+using ServicesDtoModels.Models.Shop;
 
 namespace Purchases.API.Helpers
 {

@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using WebRabbitMQ;
 
 namespace Factories.API
 {
@@ -25,11 +24,6 @@ namespace Factories.API
             services.AddDbContext<FactoriesDbContext>(options =>
                                                           options.UseInMemoryDatabase("Factories"));
             services.AddScoped<IFactoriesService, FactoriesService>();
-            services.AddSingleton<IEventBus, RabbitMQBus>(s =>
-            {
-                var lifeTime = s.GetRequiredService<IHostApplicationLifetime>();
-                return new RabbitMQBus(lifeTime);
-            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -37,8 +31,6 @@ namespace Factories.API
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
             app.UseHttpsRedirection();
-            var component = app.ApplicationServices.GetRequiredService<IEventBus>();
-            component.Subscribe();
             app.UseRouting();
 
             app.UseAuthorization();
