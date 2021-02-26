@@ -1,58 +1,19 @@
 {
-  "ReRoutes": [
+  "Routes": [
     {
-      "DownstreamPathTemplate": "/api/Account",
-      "UpstreamPathTemplate": "/api/account",
-      "UpstreamHttpMethod": [
-        "Get",
-        "Post",
-        "Put",
-        "Delete"
-      ],
-      "DownstreamScheme": "https",
+      "DownstreamPathTemplate": "/api/Account/register",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "host.docker.internal",
           "Port": 7001
         }
-      ]
-    },
-    {
-      "DownstreamPathTemplate": "/api/Purchases",
-      "UpstreamPathTemplate": "/api/purchases",
-      "UpstreamHttpMethod": [
-        "Get",
-        "Post",
-        "Put",
-        "Delete"
       ],
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "host.docker.internal",
-          "Port": 7002
-        }
-      ]
-    },
-    {
-      "DownstreamPathTemplate": "api/Shop",
-      "UpstreamPathTemplate": "api/shops",
-      "UpstreamHttpMethod": [
-        "Get",
-        "Post",
-        "Put",
-        "Delete"
-      ],
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "host.docker.internal",
-          "Port": 7003
-        }
-      ]
+      "UpstreamPathTemplate": "/api/account/register",
+      "UpstreamHttpMethod": [ "Post" ]
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http:localhost:5000"
+    "BaseUrl": "https://localhost:5000"
   }
 }
