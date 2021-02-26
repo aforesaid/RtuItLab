@@ -1,8 +1,8 @@
-﻿using System;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Shops.API.Models.DTOs;
+using ServicesDtoModels.Models.Identity;
+using System;
 
 namespace Shops.API.Helpers
 {
@@ -11,7 +11,7 @@ namespace Shops.API.Helpers
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            if (!(context.HttpContext.Items["User"] is UserDTO))
+            if (!(context.HttpContext.Items["User"] is User))
                 context.Result = new JsonResult(new { message = "Unauthorized" })
                     { StatusCode = StatusCodes.Status401Unauthorized };
         }

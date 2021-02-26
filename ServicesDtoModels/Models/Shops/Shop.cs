@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ServicesDtoModels.Models.Shop
+namespace ServicesDtoModels.Models.Shops
 {
     public class Shop
     {

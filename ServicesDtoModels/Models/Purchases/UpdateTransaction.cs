@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using ServicesDtoModels.Models.Shop;
+using ServicesDtoModels.Models.Shops;
 
 namespace ServicesDtoModels.Models.Purchases
 {

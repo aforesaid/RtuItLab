@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Shops.API.Services;
+using Shops.Domain.Services;
 using System.Collections.Generic;
 
 namespace Shops.API

@@ -1,4 +1,4 @@
-﻿namespace ServicesDtoModels.Models.Shop
+﻿namespace ServicesDtoModels.Models.Shops
 {
     public class ProductByFactory : Product
     {

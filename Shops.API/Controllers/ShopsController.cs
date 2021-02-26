@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using Shops.API.Services;
-using System.Threading.Tasks;
-using ServicesDtoModels.Models.Shop;
+﻿using Microsoft.AspNetCore.Mvc;
+using ServicesDtoModels.Models.Shops;
 using Shops.API.Helpers;
+using Shops.Domain.Services;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 namespace Shops.API.Controllers
 {
     [Route("api/[controller]")]

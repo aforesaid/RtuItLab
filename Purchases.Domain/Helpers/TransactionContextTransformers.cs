@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Purchases.DAL.ContextModels;
 using ServicesDtoModels.Models.Purchases;
-using ServicesDtoModels.Models.Shop;
+using ServicesDtoModels.Models.Shops;
 
 namespace Purchases.Domain.Helpers
 {
