@@ -7,28 +7,14 @@ services:
       context: .
       dockerfile: ApiGateway/Dockerfile
     ports:
-      - 5000
+      - 5000:5000
   identityapi:
         image: api/identityapi
         build:
             context: .
             dockerfile: Identity.API/Dockerfile
         ports:
-            - 7001
-  purchasesapi:
-        image: api/purchasesapi
-        build:
-            context: .
-            dockerfile: Purchases.API/Dockerfile
-        ports:
-            - 7002
-  shopsapi:
-        image: api/shops
-        build:
-            context: .
-            dockerfile: Shops.API/Dockerfile
-        ports:
-            - 7003
+            - 7001:7001
 
         
 
