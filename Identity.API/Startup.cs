@@ -1,7 +1,7 @@
-using Identity.API.Data;
 using Identity.API.Helpers;
-using Identity.API.Models;
-using Identity.API.Services;
+using Identity.DAL.ContextModels;
+using Identity.DAL.Data;
+using Identity.Domain.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
+
 namespace Identity.API
 {
     public class Startup

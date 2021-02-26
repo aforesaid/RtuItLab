@@ -1,7 +1,7 @@
-﻿using Identity.API.Models.DTOs;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using ServicesDtoModels.Models.Identity;
 using System;
 
 namespace Identity.API.Helpers
@@ -11,7 +11,7 @@ namespace Identity.API.Helpers
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            if (!(context.HttpContext.Items["User"] is UserDTO))
+            if (!(context.HttpContext.Items["User"] is User))
                 context.Result = new JsonResult(new {message = "Unauthorized"})
                     {StatusCode = StatusCodes.Status401Unauthorized};
         }

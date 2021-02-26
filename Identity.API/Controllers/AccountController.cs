@@ -1,10 +1,10 @@
 ﻿using Identity.API.Helpers;
-using Identity.API.Models;
-using Identity.API.Services;
+using Identity.DAL.ContextModels;
+using Identity.Domain.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ServicesDtoModels.Models.Identity;
 using System.Threading.Tasks;
-using Identity.API.Models.DTOs;
 
 namespace Identity.API.Controllers
 {
@@ -21,18 +21,18 @@ namespace Identity.API.Controllers
             _userService = userService;
         }
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] AuthorizeModel model)
+        public async Task<IActionResult> Login([FromBody] AuthenticateRequest model)
         {
             var applicationUser = new ApplicationUser()
             {
-                UserName = model.Login
+                UserName = model.Username
             };
-            var user = await _userManager.FindByNameAsync(model.Login);
+            var user = await _userManager.FindByNameAsync(model.Username);
             if (await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 var request = new AuthenticateRequest
                 {
-                    Username = model.Login,
+                    Username = model.Username,
                     Password = model.Password
                 };
                 var response = await _userService.Authenticate(request);
@@ -42,11 +42,11 @@ namespace Identity.API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] AuthorizeModel model)
+        public async Task<IActionResult> Register([FromBody] AuthenticateRequest model)
         {
             var applicationUser = new ApplicationUser()
             {
-                UserName = model.Login
+                UserName = model.Username
             };
             var response = await _userManager.CreateAsync(applicationUser, model.Password);
             return Ok(response);
@@ -56,7 +56,7 @@ namespace Identity.API.Controllers
         [Authorize]
         public IActionResult GetUser()
         {
-            var user = HttpContext.Items["User"] as UserDTO;
+            var user = HttpContext.Items["User"] as User;
             return Ok(user);
         }
 

@@ -1,16 +1,15 @@
-﻿using Identity.API.Helpers;
-using Identity.API.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System;
+﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Identity.API.Models.DTOs;
+using Identity.DAL.ContextModels;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using ServicesDtoModels.Models.Identity;
 
-namespace Identity.API.Services
+namespace Identity.Domain.Services
 {
     public class UserService : IUserService
     {
@@ -32,16 +31,16 @@ namespace Identity.API.Services
             if (user != null && await ValidateUser(user,model.Password))
             {
                 var token = GenerateJwtToken(user);
-                return new AuthenticateResponse(user, token);
+                return new AuthenticateResponse(new User{Id = user.Id, Username = user.UserName}, token);
             }
             //TODO: return "wrong password"
             return null;
         }
 
-        public async Task<UserDTO> GetUserById(string id)
+        public async Task<User> GetUserById(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            var userDto = new UserDTO
+            var userDto = new User
             {
                 Id = user.Id,
                 Username = user.UserName

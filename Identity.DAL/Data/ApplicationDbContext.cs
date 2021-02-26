@@ -1,9 +1,8 @@
-﻿using System;
-using Identity.API.Models;
+﻿using Identity.DAL.ContextModels;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Identity.API.Data
+namespace Identity.DAL.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

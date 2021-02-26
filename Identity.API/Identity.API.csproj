@@ -22,6 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Identity.DAL\Identity.DAL.csproj" />
+    <ProjectReference Include="..\Identity.Domain\Identity.Domain.csproj" />
     <ProjectReference Include="..\ServicesDtoModels\ServicesDtoModels.csproj" />
   </ItemGroup>
 

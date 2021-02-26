@@ -1,4 +1,4 @@
-﻿namespace Identity.API.Helpers
+﻿namespace Identity.Domain
 {
     public class AppSettings
     {
