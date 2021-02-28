@@ -1,18 +1,23 @@
-﻿using System.Threading.Tasks;
-using Identity.Domain.Services;
+﻿using Identity.Domain.Services;
 using MassTransit;
-using ServicesDtoModels.Models.Identity;
+using Microsoft.Extensions.Logging;
+using RtuItLab.Infrastructure.Models.Identity;
+using System.Threading.Tasks;
 
 namespace RabbitMQ.Consumers.Identity
 {
-    public class Authenticate : IdentityBaseConsumer, IConsumer<AuthenticateRequest>
+    public class Authenticate : IdentityBaseConsumer, IConsumer<LoginRequest>
     {
-        public Authenticate(IUserService userService) : base(userService)
+        private readonly ILogger<Authenticate> _logger;
+
+        public Authenticate(IUserService userService, ILogger<Authenticate> logger) : base(userService)
         {
+            _logger = logger;
         }
 
-        public async Task Consume(ConsumeContext<AuthenticateRequest> context)
+        public async Task Consume(ConsumeContext<LoginRequest> context)
         {
+            _logger.LogInformation($"Value: {context.Message.Password} {context.Message.Username}");
             var order = await UserService.Authenticate(context.Message);
             await context.RespondAsync(order);
         }

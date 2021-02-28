@@ -1,3 +1,4 @@
+using System;
 using Identity.API.Helpers;
 using Identity.DAL.ContextModels;
 using Identity.DAL.Data;
@@ -11,6 +12,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
+using MassTransit;
+using Newtonsoft.Json;
 
 namespace Identity.API
 {
@@ -25,15 +28,6 @@ namespace Identity.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(option =>
-                                                            option.UseInMemoryDatabase("identity"));
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-            {
-                options.Password.RequiredLength         = 8;
-                options.Password.RequireNonAlphanumeric = false;
-            }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-            services.AddScoped<IUserService, UserService>();
-            //services.AddSingleton<IEventBus, RabbitMQBus>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -71,12 +65,20 @@ namespace Identity.API
                     }
                 });
             });
+            services.AddMassTransit(x =>
+            {
+                x.UsingRabbitMq((context, cfg) =>
+                {
+
+                    cfg.Host(new Uri("rabbitmq://host.docker.internal/"));
+                });
+            });
+            services.AddMassTransitHostedService();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
-            app.UseHttpsRedirection();
             app.UseSwagger()
                 .UseSwaggerUI(c =>
                 {
@@ -84,7 +86,6 @@ namespace Identity.API
                 });
             app.UseRouting();
             app.UseMiddleware<JwtMiddleware>();
-
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }

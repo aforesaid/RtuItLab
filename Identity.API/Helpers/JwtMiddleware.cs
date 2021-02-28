@@ -1,56 +1,42 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
+﻿using MassTransit;
+using Microsoft.AspNetCore.Http;
+using RtuItLab.Infrastructure.Models.Identity;
+using ServicesDtoModels.Models.Identity;
 using System;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Identity.Domain;
-using Identity.Domain.Services;
 
 namespace Identity.API.Helpers
 {
     public class JwtMiddleware
     {
-        private readonly AppSettings _appSettings;
         private readonly RequestDelegate _next;
 
-        public JwtMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings)
+        public JwtMiddleware(RequestDelegate next)
         {
             _next        = next;
-            _appSettings = appSettings.Value;
         }
 
-        public async Task Invoke(HttpContext context, IUserService userService)
+        public async Task Invoke(HttpContext context, IBusControl busControl)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(' ').Last();
             if (token != null)
-                await AttachUserToContext(context, userService, token);
+                await AttachUserToContext(context, busControl, token);
             await _next(context);
         }
 
-        private async Task AttachUserToContext(HttpContext context, IUserService userService, string token)
+        private async Task AttachUserToContext(HttpContext context, IBusControl busControl, string token)
         {
-            try
+            var serviceAddress = new Uri("rabbitmq://localhost/identityQueue");
+            var client = busControl.CreateRequestClient<TokenRequest>(serviceAddress);
+            var response = await client.GetResponse<User>(new TokenRequest
             {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key          = Encoding.ASCII.GetBytes(_appSettings.Secret);
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey         = new SymmetricSecurityKey(key),
-                    ValidateIssuer           = false,
-                    ValidateAudience         = false,
-                    ClockSkew                = TimeSpan.Zero
-                }, out var validatedToken);
-                var jwtToken = validatedToken as JwtSecurityToken;
-                var userId   = jwtToken?.Claims.First(item => item.Type == "id").Value;
-                context.Items["User"] = await userService.GetUserById(userId);
-            }
-            catch (Exception e)
-            {
-              //TODO: Add logging
+                Token = token
+            });
+            var user = response.Message;
+            if (user.Id != null)
+            { 
+                context.Items["User"] = response.Message;
             }
         }
     }

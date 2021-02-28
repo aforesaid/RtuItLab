@@ -19,8 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Shops.DAL\Shops.DAL.csproj" />
-    <ProjectReference Include="..\..\Shops.Domain\Shops.Domain.csproj" />
     <ProjectReference Include="..\RtuItLab.Infrastructure\RtuItLab.Infrastructure.csproj" />
     <ProjectReference Include="..\Shops.DAL\Shops.DAL.csproj" />
     <ProjectReference Include="..\Shops.Domain\Shops.Domain.csproj" />

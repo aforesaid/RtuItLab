@@ -1,13 +1,24 @@
 version: '3.4'
 
 services:
+  rabbit:
+      hostname: rabbit
+      image: rabbitmq:3.6.1-management
+      ports:
+         - "5672:5672" 
+         - "15672:15672"  
   apigateway:
     image: apigateway
     build:
       context: .
-      dockerfile: ApiGateway/Dockerfile
+      dockerfile: RtuItLab.ApiGateway/Dockerfile
     ports:
       - 5000:5000
+  rabbitmqs:
+        image: rabbit
+        build:
+            context: .
+            dockerfile: RabbitMQ/Dockerfile
   identityapi:
         image: api/identityapi
         build:
@@ -15,6 +26,7 @@ services:
             dockerfile: Identity.API/Dockerfile
         ports:
             - 7001:7001
+ 
 
         
 

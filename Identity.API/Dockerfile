@@ -7,7 +7,9 @@ EXPOSE 7001
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["Identity.API/Identity.API.csproj", "Identity.API/"]
-COPY ["WebRabbitMQ/WebRabbitMQ.csproj", "WebRabbitMQ/"]
+COPY ["Identity.DAL/Identity.DAL.csproj", "Identity.DAL/"]
+COPY ["Identity.Domain/Identity.Domain.csproj", "Identity.Domain/"]
+COPY ["RtuItLab.Infrastructure/RtuItLab.Infrastructure.csproj", "RtuItLab.Infrastructure/"]
 RUN dotnet restore "Identity.API/Identity.API.csproj"
 COPY . .
 WORKDIR "/src/Identity.API"
