@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
 using Purchases.DAL.ContextModels;
 using Purchases.DAL.Data;
 using Purchases.Domain.Helpers;
+using RtuItLab.Infrastructure.Models.Purchases;
 using ServicesDtoModels.Models.Identity;
 using ServicesDtoModels.Models.Purchases;
 

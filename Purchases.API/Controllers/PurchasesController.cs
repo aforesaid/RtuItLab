@@ -8,6 +8,7 @@ using ServicesDtoModels.Models.Purchases;
 using System.Threading.Tasks;
 using RtuItLab.Infrastructure.MassTransit.Requests.Purchases;
 using RtuItLab.Infrastructure.MassTransit.Responds.Purchases;
+using RtuItLab.Infrastructure.Models.Purchases;
 
 namespace Purchases.API.Controllers
 {

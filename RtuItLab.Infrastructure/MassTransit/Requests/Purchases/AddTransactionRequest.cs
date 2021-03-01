@@ -1,4 +1,5 @@
-﻿using ServicesDtoModels.Models.Identity;
+﻿using RtuItLab.Infrastructure.Models.Purchases;
+using ServicesDtoModels.Models.Identity;
 using ServicesDtoModels.Models.Purchases;
 
 namespace RtuItLab.Infrastructure.MassTransit.Requests.Purchases

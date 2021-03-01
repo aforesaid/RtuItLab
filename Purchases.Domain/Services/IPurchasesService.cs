@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using RtuItLab.Infrastructure.Models.Purchases;
 using ServicesDtoModels.Models.Identity;
 using ServicesDtoModels.Models.Purchases;
 

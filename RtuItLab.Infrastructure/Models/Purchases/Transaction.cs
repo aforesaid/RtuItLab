@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using ServicesDtoModels.Models.Purchases;
 using ServicesDtoModels.Models.Shops;
 
-namespace ServicesDtoModels.Models.Purchases
+namespace RtuItLab.Infrastructure.Models.Purchases
 {
     [RequireWhenIsShop]
     public class Transaction
@@ -27,9 +28,9 @@ namespace ServicesDtoModels.Models.Purchases
                 return new ValidationResult("Invalid Products: Products can't be null");
             if (!employee.IsShopCreate)
                 return ValidationResult.Success;
-            if (employee.Receipt != null ||
-                employee.Receipt?.ShopId != default || employee.Receipt?)
-            return IsValid(employee.Receipt) ? ValidationResult.Success : new ValidationResult("Invalid Receipt value");
+            if (employee.Receipt == null || employee.Receipt.Cost == default || employee.Receipt.ShopId == default)
+                return new ValidationResult("Invalid Receipt value");
+            return ValidationResult.Success;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Purchases.DAL.ContextModels;
+using RtuItLab.Infrastructure.Models.Purchases;
 using ServicesDtoModels.Models.Purchases;
 using ServicesDtoModels.Models.Shops;
 
