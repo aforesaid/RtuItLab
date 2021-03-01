@@ -1,14 +1,11 @@
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Purchases.API.Helpers;
-using Purchases.DAL.Data;
-using Purchases.Domain.Services;
 using System;
 using System.Collections.Generic;
 
@@ -26,9 +23,6 @@ namespace Purchases.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<PurchasesDbContext>(
-                                                      option => option.UseInMemoryDatabase("purchases"));
-            services.AddScoped<IPurchasesService, PurchasesService>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo()
@@ -80,7 +74,6 @@ namespace Purchases.API
         {
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
-            app.UseHttpsRedirection();
             app.UseSwagger()
                 .UseSwaggerUI(c =>
                               {

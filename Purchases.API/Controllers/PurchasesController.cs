@@ -1,25 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using MassTransit;
+﻿using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Purchases.API.Helpers;
-using ServicesDtoModels.Models.Identity;
-using ServicesDtoModels.Models.Purchases;
-using System.Threading.Tasks;
 using RtuItLab.Infrastructure.MassTransit.Requests.Purchases;
 using RtuItLab.Infrastructure.MassTransit.Responds.Purchases;
 using RtuItLab.Infrastructure.Models.Purchases;
+using ServicesDtoModels.Models.Identity;
+using ServicesDtoModels.Models.Purchases;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace Purchases.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    //TODO: добавить миддлвеер для авторизации с кроликом
     public class PurchasesController : ControllerBase
     {
         private readonly IBusControl _busControl;
+        private readonly Uri _rabbitMqUrl = new Uri("rabbitmq://localhost/purchasesQueue");
+
         public PurchasesController(IBusControl busControl)
         {
             _busControl = busControl;
@@ -28,26 +28,23 @@ namespace Purchases.API.Controllers
         public async Task<IActionResult> GetAllHistory()
         {
             var user = HttpContext.Items["User"] as User;
-            var serviceAddress = new Uri("rabbitmq://localhost/purchasesQueue");
-            var client = _busControl.CreateRequestClient<User>(serviceAddress);
+            var client = _busControl.CreateRequestClient<User>(_rabbitMqUrl);
             var response = await client.GetResponse<GetTransactionsResponse>(user);
-            return Ok(response);
+            return Ok(response.Message);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetHistory(int id)
         {
             var user = HttpContext.Items["User"] as User;
-            var serviceAddress = new Uri("rabbitmq://localhost/purchasesQueue");
-            var request = new GetTransactionByIdRequest
+            var client = _busControl.CreateRequestClient<GetTransactionByIdRequest>(_rabbitMqUrl);
+            var response = await client.GetResponse<Transaction>(new GetTransactionByIdRequest
             {
                 User = user,
                 Id = id
-            };
-            var client = _busControl.CreateRequestClient<GetTransactionByIdRequest>(serviceAddress);
-            var response = await client.GetResponse<Transaction>(request);
-            return Ok(response);
+            });
+            return Ok(response.Message);
         }
-        [HttpPost]
+        [HttpPost("add")]
         public async Task<IActionResult> AddTransaction([FromBody] Transaction transaction)
         {
             if (!ModelState.IsValid) return BadRequest("Invalid request");
@@ -56,33 +53,25 @@ namespace Purchases.API.Controllers
                 return BadRequest(new ValidationException("You can't add shops' transaction"));
             if (transaction.Receipt != null)
                 return BadRequest(new ValidationException("Receipt must be null! Use \"receipt\":null in your request"));
-            var serviceAddress = new Uri("rabbitmq://localhost/purchasesQueue");
-            var request = new AddTransactionRequest()
+            var client = _busControl.CreateRequestClient<AddTransactionRequest>(_rabbitMqUrl);
+            var response = await client.GetResponse<AddTransactionResponse>(new AddTransactionRequest()
             {
                 User = user,
                 Transaction = transaction
-            };
-            var client = _busControl.CreateRequestClient<AddTransactionRequest>(serviceAddress);
-            var response = await client.GetResponse<AddTransactionResponse>(request);
-            return Ok(response);
+            });
+            return Ok(response.Message);
         }
-        /// <summary>
-        /// Обновить транзакцию, если можно
-        /// </summary>
-        /// <returns></returns>
-        [HttpPut]
+        [HttpPut("update")]
         public async Task<IActionResult> UpdateTransaction( [FromBody] UpdateTransaction updateTransaction)
         {
             if (!ModelState.IsValid) return BadRequest("Invalid request");
             var user = HttpContext.Items["User"] as User;
-            var serviceAddress = new Uri("rabbitmq://localhost/purchasesQueue");
-            var request = new UpdateTransactionRequest()
+            var client = _busControl.CreateRequestClient<UpdateTransactionRequest>(_rabbitMqUrl);
+            var response = await client.GetResponse<UpdateTransactionRespond>(new UpdateTransactionRequest()
             {
                 User = user,
                 Transaction = updateTransaction
-            };
-            var client = _busControl.CreateRequestClient<UpdateTransactionRequest>(serviceAddress);
-            var response = await client.GetResponse<UpdateTransactionRespond>(request);
+            });
             return Ok(response.Message);
         }
     }
