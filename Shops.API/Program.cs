@@ -14,7 +14,7 @@ namespace Shops.API
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls("http://*:7003").UseStartup<Startup>();
                 });
     }
 }

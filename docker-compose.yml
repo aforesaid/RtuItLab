@@ -33,6 +33,13 @@ services:
             dockerfile: Purchases.API/Dockerfile
         ports:
             - 7002:7002
+  shopsapi:
+        image: api/shopsapi
+        build:
+            context: .
+            dockerfile: Shops.API/Dockerfile
+        ports:
+            - 7003:7003
  
 
         

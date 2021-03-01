@@ -1,24 +1,26 @@
-﻿using System.Threading.Tasks;
-using MassTransit;
+﻿using MassTransit;
+using RtuItLab.Infrastructure.MassTransit.Requests.Shops;
 using Shops.Domain.Services;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RabbitMQ.Consumers.Shops
 {
-    public class GetProductsByShop : ShopsBaseConsumer, IConsumer<string>
+    public class GetProductsByShop : ShopsBaseConsumer, IConsumer<GetProductsRequest>
     {
         public GetProductsByShop(IShopsService shopsService) : base(shopsService)
         {
-            
         }
 
-        public async Task Consume(ConsumeContext<string> context)
+        public async Task Consume(ConsumeContext<GetProductsRequest> context)
         {
-            var isParse = int.TryParse(context.Message, out var shopId);
-            if (isParse)
+            var order = await ShopsService.GetProductsByShop(context.Message.ShopId);
+            var response = new GetProductsResponse
             {
-                var order = await ShopsService.GetProductsByShop(shopId);
-                await context.RespondAsync(order);
-            }
+                Products = order?.ToList(),
+                Success = order != null
+            };
+            await context.RespondAsync(response);
         }
     }
 }

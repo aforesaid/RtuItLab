@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MassTransit" Version="7.1.6" />
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.1.6" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.1.6" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.3">
       <PrivateAssets>all</PrivateAssets>
@@ -20,8 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RtuItLab.Infrastructure\RtuItLab.Infrastructure.csproj" />
-    <ProjectReference Include="..\Shops.DAL\Shops.DAL.csproj" />
-    <ProjectReference Include="..\Shops.Domain\Shops.Domain.csproj" />
   </ItemGroup>
 
 

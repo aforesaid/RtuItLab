@@ -38,14 +38,14 @@ namespace Shops.Domain.Services
                 .Select(item => item.ToProductDto())
                 .ToList();
         }
-
-        public async Task<string> BuyProducts(int shopId, ICollection<Product> products)
+        //TODO: пересмотреть валидацию (какая - то дичь)
+        public async Task<(string,bool)> BuyProducts(int shopId, ICollection<Product> products)
         {
-            if (products.Count > MaxProductRequestCount)
-                return $"Too many products, max count is {MaxProductRequestCount}";
+            if (products?.Count > MaxProductRequestCount)
+                return ($"Too many products, max count is {MaxProductRequestCount}",false);
             var shop = await _context.Shops.Include(item => item.Products)
                 .FirstOrDefaultAsync(item => item.Id == shopId);
-            var isSuccess = products.Select(product =>
+            var isSuccess = products?.Select(product =>
             {
                 var item = shop.Products.FirstOrDefault(productContext => productContext.Id == product.ProductId);
                 if (item is null || item.Count < product.Count)
@@ -53,9 +53,16 @@ namespace Shops.Domain.Services
                 item.Count -= product.Count;
                 return "Success";
             }).Any(item => item != "BadRequest");
-            if (!isSuccess) return "No product found";
-            await _context.SaveChangesAsync();
-            return "Success";
+            switch (isSuccess)
+            {
+                case null:
+                    return ("Invalid request", false);
+                case false:
+                    return ("No product found",false);
+                default:
+                    await _context.SaveChangesAsync();
+                    return ("Success",true);
+            }
         }
         public async Task AddProductsByFactory(ICollection<ProductByFactory> products)
         {

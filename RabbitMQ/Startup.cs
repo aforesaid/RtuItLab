@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Purchases.DAL.Data;
+using Shops.DAL.Data;
 
 namespace RabbitMQ
 {
@@ -37,13 +38,15 @@ namespace RabbitMQ
                 options.UseInMemoryDatabase("identity"), ServiceLifetime.Transient);
             services.AddDbContext<PurchasesDbContext>(
                 option => option.UseInMemoryDatabase("purchases"),ServiceLifetime.Transient);
+            services.AddDbContext<ShopsDbContext>(
+                option => option.UseInMemoryDatabase("shops"), ServiceLifetime.Transient);
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 8;
                 options.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
             services.AddScoped<IPurchasesService, PurchasesService>();
-            //services.AddScoped<IShopsService,ShopsService>();
+            services.AddScoped<IShopsService, ShopsService>();
             services.AddScoped<IUserService, UserService>();
 
             services.AddMassTransit(x =>
@@ -60,12 +63,12 @@ namespace RabbitMQ
                 x.AddConsumer<GetTransactions>();
                 x.AddConsumer<UpdateTransaction>();
 
-                //// Shops
-                //x.AddConsumer<AddProductsByFactory>();
-                //x.AddConsumer<BuyProducts>();
-                //x.AddConsumer<GetAllShops>();
-                //x.AddConsumer<GetProductsByCategory>();
-                //x.AddConsumer<GetProductsByShop>();
+                // Shops
+                x.AddConsumer<AddProductsByFactory>();
+                x.AddConsumer<BuyProducts>();
+                x.AddConsumer<GetAllShops>();
+                x.AddConsumer<GetProductsByCategory>();
+                x.AddConsumer<GetProductsByShop>();
 
                 x.UsingRabbitMq((context, cfg) =>
                     {
@@ -93,17 +96,18 @@ namespace RabbitMQ
                             e.Consumer<GetTransactions>(context);
                             e.Consumer<UpdateTransaction>(context);
                         });
-                        //cfg.ReceiveEndpoint("ShopsQueue", e =>
-                        //{
-                        //    e.PrefetchCount = 20;
-                        //    e.UseMessageRetry(r => r.Interval(2, 100));
+                        cfg.ReceiveEndpoint("shopsQueue", e =>
+                        {
+                            e.PrefetchCount = 20;
+                            e.UseMessageRetry(r => r.Interval(2, 100));
 
-                        //    // Shops
-                        //    e.Consumer<BuyProducts>(context);
-                        //    e.Consumer<GetAllShops>(context);
-                        //    e.Consumer<GetProductsByCategory>(context);
-                        //    e.Consumer<GetProductsByShop>(context);
-                        //});
+                            // Shops
+                            e.Consumer<BuyProducts>(context);
+                            e.Consumer<GetAllShops>(context);
+                            e.Consumer<GetProductsByCategory>(context);
+                            e.Consumer<GetProductsByShop>(context);
+                            e.Consumer<AddProductsByFactory>(context);
+                        });
                         //cfg.ReceiveEndpoint("FactoriesQueue", e =>
                         //{
                         //    e.PrefetchCount = 20;

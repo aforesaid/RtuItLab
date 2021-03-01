@@ -1,10 +1,12 @@
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Shops.Domain.Services;
+using Shops.API.Helpers;
+using System;
 using System.Collections.Generic;
 
 namespace Shops.API
@@ -21,7 +23,6 @@ namespace Shops.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddScoped<IShopsService, ShopsService>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo()
@@ -58,13 +59,21 @@ namespace Shops.API
                     }
                 });
             });
+            services.AddMassTransit(x =>
+            {
+                x.UsingRabbitMq((context, cfg) =>
+                {
+
+                    cfg.Host(new Uri("rabbitmq://host.docker.internal/"));
+                });
+            });
+            services.AddMassTransitHostedService();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
-            app.UseHttpsRedirection();
             app.UseSwagger()
                 .UseSwaggerUI(c =>
                               {
@@ -72,8 +81,7 @@ namespace Shops.API
                               }
                              );
             app.UseRouting();
-
-            app.UseAuthorization();
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
