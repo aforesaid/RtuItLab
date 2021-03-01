@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Purchases.API.Helpers;
@@ -51,6 +52,10 @@ namespace Purchases.API.Controllers
         {
             if (!ModelState.IsValid) return BadRequest("Invalid request");
             var user     = HttpContext.Items["User"] as User;
+            if (transaction.IsShopCreate)
+                return BadRequest(new ValidationException("You can't add shops' transaction"));
+            if (transaction.Receipt != null)
+                return BadRequest(new ValidationException("Receipt must be null! Use \"receipt\":null in your request"));
             var serviceAddress = new Uri("rabbitmq://localhost/purchasesQueue");
             var request = new AddTransactionRequest()
             {
@@ -58,7 +63,7 @@ namespace Purchases.API.Controllers
                 Transaction = transaction
             };
             var client = _busControl.CreateRequestClient<AddTransactionRequest>(serviceAddress);
-            var response = await client.GetResponse<object>(request);
+            var response = await client.GetResponse<AddTransactionResponse>(request);
             return Ok(response);
         }
         /// <summary>

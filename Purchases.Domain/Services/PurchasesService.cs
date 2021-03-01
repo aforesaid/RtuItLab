@@ -48,7 +48,7 @@ namespace Purchases.Domain.Services
             var currentTransaction = customer?.Transactions.FirstOrDefault(item => item.Id == transaction.Id);
             if (currentTransaction is null)
                 return ("Invalid Transaction", false);
-            var response = UpdateTransaction(currentTransaction, transaction);
+            var response = await UpdateTransaction(currentTransaction, transaction);
             return response is null
                 ? (null, true)
                 : (response, false);
@@ -76,7 +76,7 @@ namespace Purchases.Domain.Services
             }
         }
 
-        private string UpdateTransaction(TransactionContext transactionContext, UpdateTransaction updateTransaction)
+        private async Task<string> UpdateTransaction(TransactionContext transactionContext, UpdateTransaction updateTransaction)
         {
             if (transactionContext.IsShopCreate)
             {
@@ -85,16 +85,17 @@ namespace Purchases.Domain.Services
                 transactionContext.TransactionType = updateTransaction.TransactionType;
             }
             else
-                UpdateUserTransaction(transactionContext, updateTransaction);
+                await UpdateUserTransaction(transactionContext, updateTransaction);
             return null;
         }
-        private void UpdateUserTransaction(TransactionContext transactionContext, UpdateTransaction updateTransaction)
+        private async Task UpdateUserTransaction(TransactionContext transactionContext, UpdateTransaction updateTransaction)
         {
             transactionContext.TransactionType = updateTransaction.TransactionType;
             if (updateTransaction.Products != null)
                 transactionContext.Products = updateTransaction.Products.Select(item => item.ToProductContext()).ToList();
             if (updateTransaction.Date != new DateTime())
                 transactionContext.Date = updateTransaction.Date;
+            await _context.SaveChangesAsync();
         }
     }
 }

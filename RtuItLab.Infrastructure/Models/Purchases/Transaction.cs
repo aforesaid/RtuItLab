@@ -9,6 +9,7 @@ namespace RtuItLab.Infrastructure.Models.Purchases
     [RequireWhenIsShop]
     public class Transaction
     {
+        public int Id { get; set; }
         public List<Product> Products { get; set; }
 
         public DateTime Date { get; set; }
@@ -24,7 +25,7 @@ namespace RtuItLab.Infrastructure.Models.Purchases
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var employee = (Transaction)value;
-            if (employee.Products != null || employee.Products?.Count == 0)
+            if (employee.Products == null || employee.Products?.Count == 0)
                 return new ValidationResult("Invalid Products: Products can't be null");
             if (!employee.IsShopCreate)
                 return ValidationResult.Success;

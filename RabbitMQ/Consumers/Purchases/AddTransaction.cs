@@ -13,7 +13,11 @@ namespace RabbitMQ.Consumers.Purchases
         public async Task Consume(ConsumeContext<AddTransactionRequest> context)
         {
             await PurchasesService.AddTransaction(context.Message.User, context.Message.Transaction);
-            await context.RespondAsync(true);
+            await context.RespondAsync(new AddTransactionResponse
+            {
+                Transaction = context.Message.Transaction,
+                Success = true
+            });
         }
     }
 }

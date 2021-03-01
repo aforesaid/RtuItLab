@@ -14,6 +14,7 @@ namespace Purchases.Domain.Helpers
                 return null;
             return new Transaction
             {
+                Id = model.Id,
                 Products        = model.Products.Select(ToProductDto).ToList(),
                 Receipt         = ToReceiptDto(model.Receipt),
                 Date            = model.Date,
