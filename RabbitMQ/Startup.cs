@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Purchases.DAL.Data;
 
 namespace RabbitMQ
 {
@@ -34,12 +35,14 @@ namespace RabbitMQ
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseInMemoryDatabase("identity"), ServiceLifetime.Transient);
+            services.AddDbContext<PurchasesDbContext>(
+                option => option.UseInMemoryDatabase("purchases"),ServiceLifetime.Transient);
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 8;
                 options.Password.RequireNonAlphanumeric = false;
             }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-            //services.AddScoped<IPurchasesService,PurchasesService>();
+            services.AddScoped<IPurchasesService, PurchasesService>();
             //services.AddScoped<IShopsService,ShopsService>();
             services.AddScoped<IUserService, UserService>();
 
@@ -51,11 +54,11 @@ namespace RabbitMQ
                 x.AddConsumer<GetUserByToken>();
 
 
-                //// Purchases
-                //x.AddConsumer<AddTransaction>();
-                //x.AddConsumer<GetTransactionById>();
-                //x.AddConsumer<GetTransactions>();
-                //x.AddConsumer<UpdateTransaction>();
+                // Purchases
+                x.AddConsumer<AddTransaction>();
+                x.AddConsumer<GetTransactionById>();
+                x.AddConsumer<GetTransactions>();
+                x.AddConsumer<UpdateTransaction>();
 
                 //// Shops
                 //x.AddConsumer<AddProductsByFactory>();
@@ -79,17 +82,17 @@ namespace RabbitMQ
                             e.Consumer<GetUserByToken>(context);
 
                         });
-                        //cfg.ReceiveEndpoint("PurchasesQueue", e =>
-                        //{
-                        //    e.PrefetchCount = 20;
-                        //    e.UseMessageRetry(r => r.Interval(2, 100));
+                        cfg.ReceiveEndpoint("purchasesQueue", e =>
+                        {
+                            e.PrefetchCount = 20;
+                            e.UseMessageRetry(r => r.Interval(2, 100));
 
-                        //    // Purchases
-                        //    e.Consumer<AddTransaction>(context);
-                        //    e.Consumer<GetTransactionById>(context);
-                        //    e.Consumer<GetTransactions>(context);
-                        //    e.Consumer<UpdateTransaction>(context);
-                        //});
+                            // Purchases
+                            e.Consumer<AddTransaction>(context);
+                            e.Consumer<GetTransactionById>(context);
+                            e.Consumer<GetTransactions>(context);
+                            e.Consumer<UpdateTransaction>(context);
+                        });
                         //cfg.ReceiveEndpoint("ShopsQueue", e =>
                         //{
                         //    e.PrefetchCount = 20;

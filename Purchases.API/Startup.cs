@@ -1,3 +1,4 @@
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -5,9 +6,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Purchases.API.Data;
 using Purchases.API.Helpers;
+using Purchases.DAL.Data;
 using Purchases.Domain.Services;
+using System;
 using System.Collections.Generic;
 
 namespace Purchases.API
@@ -63,6 +65,15 @@ namespace Purchases.API
                     }
                 });
             });
+            services.AddMassTransit(x =>
+            {
+                x.UsingRabbitMq((context, cfg) =>
+                {
+
+                    cfg.Host(new Uri("rabbitmq://host.docker.internal/"));
+                });
+            });
+            services.AddMassTransitHostedService();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -77,7 +88,7 @@ namespace Purchases.API
                               }
                              );
             app.UseRouting();
-            app.UseMiddleware<UserMiddleware>();
+            app.UseMiddleware<JwtMiddleware>();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }

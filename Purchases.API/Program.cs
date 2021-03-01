@@ -14,7 +14,7 @@ namespace Purchases.API
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls("http://*:7002").UseStartup<Startup>();
                 });
     }
 }

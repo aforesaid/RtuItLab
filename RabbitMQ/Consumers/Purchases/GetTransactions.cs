@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using MassTransit;
 using Purchases.Domain.Services;
+using RtuItLab.Infrastructure.MassTransit.Requests.Purchases;
 using ServicesDtoModels.Models.Identity;
 
 namespace RabbitMQ.Consumers.Purchases
@@ -14,7 +16,10 @@ namespace RabbitMQ.Consumers.Purchases
         public async Task Consume(ConsumeContext<User> context)
         {
             var order = await PurchasesService.GetTransactions(context.Message);
-            await context.RespondAsync(order);
+            await context.RespondAsync(new GetTransactionsResponse{
+                Transactions = order.ToList(),
+                Count = order.Count
+            });
         }
     }
 }

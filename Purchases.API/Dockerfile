@@ -2,13 +2,23 @@
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
-EXPOSE 80
 EXPOSE 7002
-COPY . .
-RUN dotnet build "Purchases.API/Purchases.API.csproj"
-RUN dotnet publish "Purchases.API.csproj" -c Release -o /app/out
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
+WORKDIR /src
+COPY ["Purchases.API/Purchases.API.csproj", "Purchases.API/"]
+COPY ["Purchases.Domain/Purchases.Domain.csproj", "Purchases.Domain/"]
+COPY ["Purchases.DAL/Purchases.DAL.csproj", "Purchases.DAL/"]
+COPY ["RtuItLab.Infrastructure/RtuItLab.Infrastructure.csproj", "RtuItLab.Infrastructure/"]
+RUN dotnet restore "Purchases.API/Purchases.API.csproj"
+COPY . .
+WORKDIR "/src/Purchases.API"
+RUN dotnet build "Purchases.API.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "Purchases.API.csproj" -c Release -o /app/publish
+
+FROM base AS final
 WORKDIR /app
-COPY --from=base /app/out .
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Purchases.API.dll"]

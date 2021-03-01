@@ -7,18 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\Requests\**" />
-    <Compile Remove="Models\Responses\**" />
-    <Content Remove="Models\Requests\**" />
-    <Content Remove="Models\Responses\**" />
-    <EmbeddedResource Remove="Models\Requests\**" />
-    <EmbeddedResource Remove="Models\Responses\**" />
-    <None Remove="Models\Requests\**" />
-    <None Remove="Models\Responses\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="MassTransit.RabbitMQ" Version="7.1.5" />
+    <PackageReference Include="MassTransit" Version="7.1.6" />
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.1.6" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.1.6" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.3">
