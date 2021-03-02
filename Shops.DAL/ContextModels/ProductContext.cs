@@ -7,11 +7,12 @@ namespace Shops.DAL.ContextModels
     {
         [Key]
         public int Id { get; set; }
-        [ForeignKey("ShopKey")]
-        public int ShopKey { get; set; }
-        public int ProductId { get; set; }
+        [ForeignKey("ShopContextKey")]
+        public ShopContext Shop { get; set; }
+        public int ShopContextKey { get; set; }
         public int Count { get; set; }
         public string Name { get; set; }
         public string Category { get; set; }
+        public decimal Cost { get; set; }
     }
 }

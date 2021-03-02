@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
+﻿using Microsoft.EntityFrameworkCore;
 using Purchases.DAL.ContextModels;
 using Purchases.DAL.Data;
 using Purchases.Domain.Helpers;
 using RtuItLab.Infrastructure.Models.Purchases;
 using ServicesDtoModels.Models.Identity;
 using ServicesDtoModels.Models.Purchases;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Purchases.Domain.Services
 {
@@ -35,7 +34,8 @@ namespace Purchases.Domain.Services
         {
             await CheckUserIsCreate(user);
             var customer = await _context.Customers.FirstOrDefaultAsync(item => item.CustomerId == user.Id);
-            customer.Transactions.Add(transaction.ToTransactionContext());
+            var f = transaction.ToTransactionContext();
+            customer.Transactions.Add(f);
             await _context.SaveChangesAsync();
         }
 
@@ -57,7 +57,7 @@ namespace Purchases.Domain.Services
         {
             await CheckUserIsCreate(user);
             var customer = await _context.Customers.Include(item => item.Transactions)
-                .ThenInclude(item => item.Products)
+                .ThenInclude(item => item.Receipt)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(item => item.CustomerId == user.Id);
             return customer.Transactions.Select(item => item.ToTransactionDto()).ToList();
