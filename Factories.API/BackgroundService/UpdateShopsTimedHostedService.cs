@@ -1,24 +1,28 @@
-﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using MassTransit;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using RtuItLab.Infrastructure.MassTransit.Shops.Requests;
 
-namespace Factories.API.Services.BackgroundServices
+namespace Factories.API.BackgroundService
 {
     public class UpdateShopsTimedHostedService : IHostedService, IDisposable
     {
         private readonly ILogger<UpdateShopsTimedHostedService> _logger;
-        private readonly IFactoriesService _factoriesService;
+        private readonly IBusControl _busControl;
+
+        private readonly Uri _rabbitMqUrl = new Uri("rabbitmq://localhost/factoriesQueue");
 
         private Timer _timer;
         private int _executionCount;
         private const int TimerSeconds = 120;
         public UpdateShopsTimedHostedService(ILogger<UpdateShopsTimedHostedService> logger,
-            IFactoriesService factoriesService)
+            IBusControl busControl)
         {
             _logger = logger;
-            _factoriesService = factoriesService;
+            _busControl = busControl;
         }
 
         public Task StartAsync(CancellationToken stoppingToken)
@@ -30,10 +34,11 @@ namespace Factories.API.Services.BackgroundServices
             return Task.CompletedTask;
         }
 
-        private void DoWork(object state)
+        private async void DoWork(object state)
         {
             var count = Interlocked.Increment(ref _executionCount);
-            _factoriesService.CreateRequestInShops();
+            var endpoint = await _busControl.GetSendEndpoint(_rabbitMqUrl);
+            await endpoint.Send(new AddProductsByFactoryRequest());
             _logger.LogInformation(
                                    "Update Factories products", count);
         }
@@ -46,7 +51,6 @@ namespace Factories.API.Services.BackgroundServices
 
             return Task.CompletedTask;
         }
-
         public void Dispose()
         {
             _timer?.Dispose();

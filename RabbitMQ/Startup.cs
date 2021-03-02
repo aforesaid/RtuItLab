@@ -1,3 +1,5 @@
+using Factories.DAL.Data;
+using Factories.Domain.Services;
 using GreenPipes;
 using Identity.DAL.ContextModels;
 using Identity.DAL.Data;
@@ -14,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Purchases.DAL.Data;
 using Purchases.Domain.Services;
+using RabbitMQ.Consumers.Factories;
 using RabbitMQ.Consumers.Identity;
 using RabbitMQ.Consumers.Purchases;
 using RabbitMQ.Consumers.Shops;
@@ -39,6 +42,8 @@ namespace RabbitMQ
                 option => option.UseInMemoryDatabase("purchases"),ServiceLifetime.Transient);
             services.AddDbContext<ShopsDbContext>(
                 option => option.UseInMemoryDatabase("shops"), ServiceLifetime.Transient);
+            services.AddDbContext<FactoriesDbContext>(options =>
+                options.UseInMemoryDatabase("factories"));
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 8;
@@ -47,7 +52,7 @@ namespace RabbitMQ
             services.AddScoped<IPurchasesService, PurchasesService>();
             services.AddScoped<IShopsService, ShopsService>();
             services.AddScoped<IUserService, UserService>();
-
+            services.AddScoped<IFactoriesService, FactoriesService>();
             services.AddMassTransit(x =>
             {
                 // Identity
@@ -63,11 +68,13 @@ namespace RabbitMQ
                 x.AddConsumer<UpdateTransaction>();
 
                 // Shops
-                x.AddConsumer<AddProductsByFactory>();
                 x.AddConsumer<BuyProducts>();
                 x.AddConsumer<GetAllShops>();
                 x.AddConsumer<GetProductsByCategory>();
                 x.AddConsumer<GetProductsByShop>();
+
+                // Factories
+                x.AddConsumer<SubmitOrderByAddProducts>();
 
                 x.UsingRabbitMq((context, cfg) =>
                     {
@@ -105,16 +112,15 @@ namespace RabbitMQ
                             e.Consumer<GetAllShops>(context);
                             e.Consumer<GetProductsByCategory>(context);
                             e.Consumer<GetProductsByShop>(context);
-                            e.Consumer<AddProductsByFactory>(context);
                         });
-                        //cfg.ReceiveEndpoint("FactoriesQueue", e =>
-                        //{
-                        //    e.PrefetchCount = 20;
-                        //    e.UseMessageRetry(r => r.Interval(2, 100));
+                        cfg.ReceiveEndpoint("factoriesQueue", e =>
+                        {
+                            e.PrefetchCount = 20;
+                            e.UseMessageRetry(r => r.Interval(2, 100));
 
-                        //    // Shops
-                        //    e.Consumer<AddProductsByFactory>(context);
-                        //});
+                            // Factories Consumer by Shops
+                            e.Consumer<SubmitOrderByAddProducts>(context);
+                        });
                         cfg.ConfigureJsonSerializer(settings =>
                         {
                             settings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;

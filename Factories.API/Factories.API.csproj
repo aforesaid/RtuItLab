@@ -8,17 +8,20 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\**" />
-    <Compile Remove="Helpers\**" />
     <Content Remove="Controllers\**" />
-    <Content Remove="Helpers\**" />
     <EmbeddedResource Remove="Controllers\**" />
-    <EmbeddedResource Remove="Helpers\**" />
     <None Remove="Controllers\**" />
-    <None Remove="Helpers\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.1.6" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.1.6" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.1.6" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RtuItLab.Infrastructure\RtuItLab.Infrastructure.csproj" />
   </ItemGroup>
 
 
