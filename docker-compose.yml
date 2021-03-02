@@ -40,6 +40,14 @@ services:
             dockerfile: Shops.API/Dockerfile
         ports:
             - 7003:7003
+  factoriesapi:
+        image: api/factories
+        build:
+            context: .
+            dockerfile: Factories.API/Dockerfile
+        ports:
+            - 7004:7004
+
  
 
         
