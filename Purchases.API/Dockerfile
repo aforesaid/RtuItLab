@@ -7,8 +7,6 @@ EXPOSE 7002
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["Purchases.API/Purchases.API.csproj", "Purchases.API/"]
-COPY ["Purchases.Domain/Purchases.Domain.csproj", "Purchases.Domain/"]
-COPY ["Purchases.DAL/Purchases.DAL.csproj", "Purchases.DAL/"]
 COPY ["RtuItLab.Infrastructure/RtuItLab.Infrastructure.csproj", "RtuItLab.Infrastructure/"]
 RUN dotnet restore "Purchases.API/Purchases.API.csproj"
 COPY . .
