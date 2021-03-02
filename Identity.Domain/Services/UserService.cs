@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using RtuItLab.Infrastructure.Models.Identity;
-using ServicesDtoModels.Models.Identity;
 
 namespace Identity.Domain.Services
 {
@@ -19,11 +18,11 @@ namespace Identity.Domain.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly AppSettings _appSettings;
-        private readonly ILogger<User> _logger;
+        private readonly ILogger<UserService> _logger;
         public UserService(UserManager<ApplicationUser> userManager, 
             SignInManager<ApplicationUser> signInManager,
         IOptions<AppSettings> appSettings,
-            ILogger<User> logger)
+            ILogger<UserService> logger)
         {
             _userManager   = userManager;
             _signInManager = signInManager;

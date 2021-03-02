@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using MassTransit;
 using Microsoft.AspNetCore.Http;
 using RtuItLab.Infrastructure.Models.Identity;
-using ServicesDtoModels.Models.Identity;
 
 namespace Shops.API.Helpers
 {

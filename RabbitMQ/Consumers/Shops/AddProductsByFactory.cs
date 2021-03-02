@@ -1,7 +1,7 @@
 ﻿using MassTransit;
-using ServicesDtoModels.Models.Shops;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using RtuItLab.Infrastructure.Models.Shops;
 using Shops.Domain.Services;
 
 namespace RabbitMQ.Consumers.Shops

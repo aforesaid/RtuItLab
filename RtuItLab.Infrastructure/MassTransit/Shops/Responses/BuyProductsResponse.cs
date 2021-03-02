@@ -1,4 +1,4 @@
-﻿namespace RtuItLab.Infrastructure.MassTransit.Requests.Shops
+﻿namespace RtuItLab.Infrastructure.MassTransit.Shops.Responses
 {
     public class BuyProductsResponse
     {

@@ -1,6 +1,6 @@
-﻿using ServicesDtoModels.Models.Identity;
+﻿using RtuItLab.Infrastructure.Models.Identity;
 
-namespace RtuItLab.Infrastructure.MassTransit.Requests.Purchases
+namespace RtuItLab.Infrastructure.MassTransit.Purchases.Requests
 {
     public class GetTransactionByIdRequest
     {

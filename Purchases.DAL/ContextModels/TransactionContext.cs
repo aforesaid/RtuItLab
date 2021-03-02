@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using ServicesDtoModels.Models.Purchases;
+using RtuItLab.Infrastructure.Models.Purchases;
 
 namespace Purchases.DAL.ContextModels
 {

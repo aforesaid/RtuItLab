@@ -1,9 +1,8 @@
 ﻿using MassTransit;
 using Purchases.Domain.Services;
-using RtuItLab.Infrastructure.MassTransit.Requests.Purchases;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using RtuItLab.Infrastructure.MassTransit.Responds.Purchases;
+using RtuItLab.Infrastructure.MassTransit.Purchases.Requests;
 
 namespace RabbitMQ.Consumers.Purchases
 {
@@ -18,7 +17,7 @@ namespace RabbitMQ.Consumers.Purchases
         {
            var (content, isSuccess) = await PurchasesService.UpdateTransaction(context.Message.User, context.Message.Transaction);
            _logger.LogInformation($"content:{content} isSuccess:{isSuccess}");
-           await context.RespondAsync(new UpdateTransactionRespond
+           await context.RespondAsync(new UpdateTransactionResponse
            {
                Content = content,
                Success = isSuccess

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using MassTransit;
 using RtuItLab.Infrastructure.Models.Identity;
-using ServicesDtoModels.Models.Identity;
 
 namespace Purchases.API.Helpers
 {

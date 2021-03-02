@@ -1,13 +1,13 @@
 ﻿using MassTransit;
 using Microsoft.AspNetCore.Mvc;
-using RtuItLab.Infrastructure.MassTransit.Requests.Shops;
-using ServicesDtoModels.Models.Shops;
 using Shops.API.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using RtuItLab.Infrastructure.MassTransit.Shops.Requests;
+using RtuItLab.Infrastructure.MassTransit.Shops.Responses;
+using RtuItLab.Infrastructure.Models.Identity;
 using RtuItLab.Infrastructure.Models.Shops;
-using ServicesDtoModels.Models.Identity;
 
 namespace Shops.API.Controllers
 {

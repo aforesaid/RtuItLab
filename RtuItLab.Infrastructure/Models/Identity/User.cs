@@ -1,4 +1,4 @@
-﻿namespace ServicesDtoModels.Models.Identity
+﻿namespace RtuItLab.Infrastructure.Models.Identity
 {
     public class User
     {

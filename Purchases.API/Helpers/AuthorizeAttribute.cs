@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
-using ServicesDtoModels.Models.Identity;
+using RtuItLab.Infrastructure.Models.Identity;
 
 namespace Purchases.API.Helpers
 {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using ServicesDtoModels.Models.Shops;
+using RtuItLab.Infrastructure.Models.Shops;
 
-namespace ServicesDtoModels.Models.Purchases
+namespace RtuItLab.Infrastructure.Models.Purchases
 {
     public class UpdateTransaction
     {

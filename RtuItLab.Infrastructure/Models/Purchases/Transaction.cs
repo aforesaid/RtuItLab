@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using ServicesDtoModels.Models.Purchases;
-using ServicesDtoModels.Models.Shops;
+using RtuItLab.Infrastructure.Models.Shops;
 
 namespace RtuItLab.Infrastructure.Models.Purchases
 {
@@ -19,7 +18,6 @@ namespace RtuItLab.Infrastructure.Models.Purchases
 
         public Receipt Receipt { get; set; }
     }
-    //TODO: проверить, работает ли
     public class RequireWhenIsShopAttribute : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)

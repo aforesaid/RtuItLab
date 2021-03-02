@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using ServicesDtoModels.Models.Shops;
+using RtuItLab.Infrastructure.Models.Shops;
 using Shops.DAL.ContextModels;
 
 namespace Shops.Domain.Helpers

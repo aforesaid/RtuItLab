@@ -1,7 +1,8 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using MassTransit;
-using RtuItLab.Infrastructure.MassTransit.Requests.Shops;
+using RtuItLab.Infrastructure.MassTransit.Shops.Requests;
+using RtuItLab.Infrastructure.MassTransit.Shops.Responses;
 using Shops.Domain.Services;
 
 namespace RabbitMQ.Consumers.Shops

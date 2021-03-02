@@ -1,8 +1,8 @@
-﻿using ServicesDtoModels.Models.Shops;
-using System.Collections.Generic;
-using ServicesDtoModels.Models.Identity;
+﻿using System.Collections.Generic;
+using RtuItLab.Infrastructure.Models.Identity;
+using RtuItLab.Infrastructure.Models.Shops;
 
-namespace RtuItLab.Infrastructure.MassTransit.Requests.Shops
+namespace RtuItLab.Infrastructure.MassTransit.Shops.Requests
 {
     public class BuyProductsRequest
     {

@@ -3,12 +3,11 @@ using Purchases.DAL.ContextModels;
 using Purchases.DAL.Data;
 using Purchases.Domain.Helpers;
 using RtuItLab.Infrastructure.Models.Purchases;
-using ServicesDtoModels.Models.Identity;
-using ServicesDtoModels.Models.Purchases;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using RtuItLab.Infrastructure.Models.Identity;
 
 namespace Purchases.Domain.Services
 {

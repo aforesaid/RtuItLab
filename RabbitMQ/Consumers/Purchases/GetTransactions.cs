@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using MassTransit;
 using Purchases.Domain.Services;
-using RtuItLab.Infrastructure.MassTransit.Requests.Purchases;
-using ServicesDtoModels.Models.Identity;
+using RtuItLab.Infrastructure.MassTransit.Purchases.Responses;
+using RtuItLab.Infrastructure.Models.Identity;
 
 namespace RabbitMQ.Consumers.Purchases
 {

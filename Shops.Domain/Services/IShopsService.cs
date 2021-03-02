@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using RtuItLab.Infrastructure.Models.Purchases;
-using ServicesDtoModels.Models.Shops;
+using RtuItLab.Infrastructure.Models.Shops;
 
 namespace Shops.Domain.Services
 {

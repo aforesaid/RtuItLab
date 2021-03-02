@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using ServicesDtoModels.Models.Identity;
 using System;
+using RtuItLab.Infrastructure.Models.Identity;
 
 namespace Identity.API.Helpers
 {

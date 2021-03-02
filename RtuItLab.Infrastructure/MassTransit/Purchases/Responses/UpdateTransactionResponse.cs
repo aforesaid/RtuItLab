@@ -1,4 +1,4 @@
-﻿namespace RtuItLab.Infrastructure.MassTransit.Responds.Purchases
+﻿namespace RtuItLab.Infrastructure.MassTransit.Purchases.Responses
 {
     public class UpdateTransactionRespond
     {

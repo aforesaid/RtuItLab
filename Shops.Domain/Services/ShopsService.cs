@@ -4,9 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RtuItLab.Infrastructure.Models.Purchases;
-using ServicesDtoModels.Models.Identity;
-using ServicesDtoModels.Models.Purchases;
-using ServicesDtoModels.Models.Shops;
+using RtuItLab.Infrastructure.Models.Shops;
 using Shops.DAL.Data;
 using Shops.Domain.Helpers;
 

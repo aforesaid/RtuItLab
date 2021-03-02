@@ -1,4 +1,4 @@
-﻿namespace ServicesDtoModels.Models.Shops
+﻿namespace RtuItLab.Infrastructure.Models.Shops
 {
     public class Product
     {

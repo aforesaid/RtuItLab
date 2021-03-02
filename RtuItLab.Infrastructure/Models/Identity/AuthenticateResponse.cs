@@ -1,4 +1,4 @@
-﻿namespace ServicesDtoModels.Models.Identity
+﻿namespace RtuItLab.Infrastructure.Models.Identity
 {
     public class AuthenticateResponse
     {
@@ -14,9 +14,6 @@
             Token    = token;
         }
 
-        public AuthenticateResponse()
-        {
-            
-        }
+        public AuthenticateResponse() {}
     }
 }

@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using RtuItLab.Infrastructure.Models.Purchases;
-using ServicesDtoModels.Models.Purchases;
 
-namespace RtuItLab.Infrastructure.MassTransit.Requests.Purchases
+namespace RtuItLab.Infrastructure.MassTransit.Purchases.Responses
 {
     public class GetTransactionsResponse
     {

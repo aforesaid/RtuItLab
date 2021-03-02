@@ -1,4 +1,4 @@
-﻿namespace ServicesDtoModels.Models.Purchases
+﻿namespace RtuItLab.Infrastructure.Models.Purchases
 {
     public enum TransactionTypes
     {

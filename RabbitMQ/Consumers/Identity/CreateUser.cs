@@ -5,9 +5,7 @@ using System.Threading.Tasks;
 using Identity.Domain.Services;
 using MassTransit;
 using Microsoft.Extensions.Logging;
-using ServicesDtoModels.Models.Identity;
-using ServicesDtoModels.Models.Purchases;
-using ServicesDtoModels.Models.Shops;
+using RtuItLab.Infrastructure.Models.Identity;
 
 namespace RabbitMQ.Consumers.Identity
 {

@@ -1,5 +1,4 @@
-﻿using ServicesDtoModels.Models.Identity;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using RtuItLab.Infrastructure.Models.Identity;
 

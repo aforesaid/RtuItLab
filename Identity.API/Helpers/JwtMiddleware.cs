@@ -1,7 +1,6 @@
 ﻿using MassTransit;
 using Microsoft.AspNetCore.Http;
 using RtuItLab.Infrastructure.Models.Identity;
-using ServicesDtoModels.Models.Identity;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

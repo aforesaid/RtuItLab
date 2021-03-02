@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ServicesDtoModels.Models.Purchases
+namespace RtuItLab.Infrastructure.Models.Purchases
 {
     public class Receipt
     {

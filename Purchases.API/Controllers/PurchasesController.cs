@@ -1,14 +1,13 @@
 ﻿using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Purchases.API.Helpers;
-using RtuItLab.Infrastructure.MassTransit.Requests.Purchases;
-using RtuItLab.Infrastructure.MassTransit.Responds.Purchases;
 using RtuItLab.Infrastructure.Models.Purchases;
-using ServicesDtoModels.Models.Identity;
-using ServicesDtoModels.Models.Purchases;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using RtuItLab.Infrastructure.MassTransit.Purchases.Requests;
+using RtuItLab.Infrastructure.MassTransit.Purchases.Responses;
+using RtuItLab.Infrastructure.Models.Identity;
 
 namespace Purchases.API.Controllers
 {
@@ -67,7 +66,7 @@ namespace Purchases.API.Controllers
             if (!ModelState.IsValid) return BadRequest("Invalid request");
             var user = HttpContext.Items["User"] as User;
             var client = _busControl.CreateRequestClient<UpdateTransactionRequest>(_rabbitMqUrl);
-            var response = await client.GetResponse<UpdateTransactionRespond>(new UpdateTransactionRequest()
+            var response = await client.GetResponse<UpdateTransactionResponse>(new UpdateTransactionRequest()
             {
                 User = user,
                 Transaction = updateTransaction

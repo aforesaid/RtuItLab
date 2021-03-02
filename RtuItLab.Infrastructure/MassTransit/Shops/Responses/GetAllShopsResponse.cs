@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using ServicesDtoModels.Models.Shops;
+using RtuItLab.Infrastructure.Models.Shops;
 
-namespace RtuItLab.Infrastructure.MassTransit.Requests.Shops
+namespace RtuItLab.Infrastructure.MassTransit.Shops.Responses
 {
     public class GetAllShopsResponse
     {
