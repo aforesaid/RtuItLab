@@ -1,13 +1,13 @@
 ﻿using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Purchases.API.Helpers;
+using RtuItLab.Infrastructure.MassTransit.Purchases.Requests;
+using RtuItLab.Infrastructure.MassTransit.Purchases.Responses;
+using RtuItLab.Infrastructure.Models.Identity;
 using RtuItLab.Infrastructure.Models.Purchases;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using RtuItLab.Infrastructure.MassTransit.Purchases.Requests;
-using RtuItLab.Infrastructure.MassTransit.Purchases.Responses;
-using RtuItLab.Infrastructure.Models.Identity;
 
 namespace Purchases.API.Controllers
 {

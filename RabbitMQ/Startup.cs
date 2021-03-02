@@ -1,25 +1,24 @@
+using GreenPipes;
+using Identity.DAL.ContextModels;
+using Identity.DAL.Data;
 using Identity.Domain.Services;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
+using Purchases.DAL.Data;
 using Purchases.Domain.Services;
 using RabbitMQ.Consumers.Identity;
 using RabbitMQ.Consumers.Purchases;
 using RabbitMQ.Consumers.Shops;
-using Shops.Domain.Services;
-using System;
-using GreenPipes;
-using Identity.DAL.ContextModels;
-using Identity.DAL.Data;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using Purchases.DAL.Data;
 using Shops.DAL.Data;
+using Shops.Domain.Services;
 
 namespace RabbitMQ
 {

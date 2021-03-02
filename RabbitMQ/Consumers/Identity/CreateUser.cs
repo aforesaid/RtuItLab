@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Identity.Domain.Services;
+﻿using Identity.Domain.Services;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 using RtuItLab.Infrastructure.Models.Identity;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RabbitMQ.Consumers.Identity
 {

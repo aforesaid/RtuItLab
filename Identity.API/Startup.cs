@@ -1,19 +1,13 @@
-using System;
 using Identity.API.Helpers;
-using Identity.DAL.ContextModels;
-using Identity.DAL.Data;
-using Identity.Domain.Services;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Collections.Generic;
-using MassTransit;
-using Newtonsoft.Json;
 
 namespace Identity.API
 {

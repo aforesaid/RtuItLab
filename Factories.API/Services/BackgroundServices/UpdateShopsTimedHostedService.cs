@@ -1,37 +1,39 @@
-﻿using System;
+﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Factories.API.Services.BackgroundServices
 {
     public class UpdateShopsTimedHostedService : IHostedService, IDisposable
     {
-        private int executionCount = 0;
         private readonly ILogger<UpdateShopsTimedHostedService> _logger;
+        private readonly IFactoriesService _factoriesService;
+
         private Timer _timer;
+        private int _executionCount;
         private const int TimerSeconds = 120;
-        public UpdateShopsTimedHostedService(ILogger<UpdateShopsTimedHostedService> logger)
+        public UpdateShopsTimedHostedService(ILogger<UpdateShopsTimedHostedService> logger,
+            IFactoriesService factoriesService)
         {
             _logger = logger;
+            _factoriesService = factoriesService;
         }
 
         public Task StartAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("Sber Timed Hosted Service running.");
+            _logger.LogInformation("Update Factories Timed Hosted Service running.");
 
             _timer = new Timer(DoWork, null, TimeSpan.Zero,
                                TimeSpan.FromSeconds(TimerSeconds));
-
             return Task.CompletedTask;
         }
 
         private void DoWork(object state)
         {
-            var count = Interlocked.Increment(ref executionCount);
-            //TODO: добавить обновление токенов сбер
-
+            var count = Interlocked.Increment(ref _executionCount);
+            _factoriesService.CreateRequestInShops();
             _logger.LogInformation(
                                    "Update Factories products", count);
         }

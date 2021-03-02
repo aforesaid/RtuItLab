@@ -3,6 +3,7 @@ using Purchases.Domain.Services;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RtuItLab.Infrastructure.MassTransit.Purchases.Requests;
+using RtuItLab.Infrastructure.MassTransit.Purchases.Responses;
 
 namespace RabbitMQ.Consumers.Purchases
 {

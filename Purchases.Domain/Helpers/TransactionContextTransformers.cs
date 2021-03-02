@@ -13,7 +13,7 @@ namespace Purchases.Domain.Helpers
                 return null;
             return new TransactionContext
             {
-                Products        = model.Products.Select(ToProductContext).ToList(),
+                Products        = model.Products?.Select(ToProductContext).ToList(),
                 Receipt         = model.Receipt.ToReceiptContext(),
                 Date            = model.Date,
                 TransactionType = model.TransactionType,

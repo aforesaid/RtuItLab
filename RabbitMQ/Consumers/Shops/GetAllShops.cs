@@ -7,7 +7,6 @@ using Shops.Domain.Services;
 
 namespace RabbitMQ.Consumers.Shops
 {
-    //TODO: исправить, если можно, так как параметры к методу не нужны
     public class GetAllShops : ShopsBaseConsumer, IConsumer<GetAllShopsRequest>
     {
         public GetAllShops(IShopsService shopsService) : base(shopsService)
