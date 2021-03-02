@@ -15,7 +15,7 @@ namespace Shops.Domain.Helpers
                 Id          = model.Id,
                 Address     = model.Address,
                 PhoneNumber = model.PhoneNumber,
-                Products    = model.Products.Select(ToProductDto).ToList()
+                Products    = model.Products?.Select(ToProductDto).ToList()
             };
         }
         public static Product ToProductDto(this ProductContext model)
@@ -24,7 +24,8 @@ namespace Shops.Domain.Helpers
                 return null;
             return new Product
             {
-                ProductId = model.ProductId,
+                Cost = model.Cost,
+                ProductId = model.Id,
                 Count = model.Count,
                 Name = model.Name,
                 Category = model.Category

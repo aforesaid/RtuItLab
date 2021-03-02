@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using RtuItLab.Infrastructure.Models.Purchases;
+using ServicesDtoModels.Models.Identity;
+using ServicesDtoModels.Models.Purchases;
 using ServicesDtoModels.Models.Shops;
 using Shops.DAL.Data;
 using Shops.Domain.Helpers;
@@ -45,14 +49,14 @@ namespace Shops.Domain.Services
                 return ($"Too many products, max count is {MaxProductRequestCount}",false);
             var shop = await _context.Shops.Include(item => item.Products)
                 .FirstOrDefaultAsync(item => item.Id == shopId);
-            var isSuccess = products?.Select(product =>
+            var isSuccess = ! products?.Any(product =>
             {
-                var item = shop.Products.FirstOrDefault(productContext => productContext.Id == product.ProductId);
+                var item = shop?.Products.FirstOrDefault(productContext => productContext.Id == product.ProductId);
                 if (item is null || item.Count < product.Count)
-                    return "BadRequest";
+                    return true;
                 item.Count -= product.Count;
-                return "Success";
-            }).Any(item => item != "BadRequest");
+                return false;
+            });
             switch (isSuccess)
             {
                 case null:
@@ -63,6 +67,23 @@ namespace Shops.Domain.Services
                     await _context.SaveChangesAsync();
                     return ("Success",true);
             }
+        }
+        public Task<Transaction> CreateTransaction(int shopId, ICollection<Product> products)
+        {
+            var response = new Transaction
+            {
+                Products = products.ToList(),
+                Date = DateTime.Now,
+                IsShopCreate = true,
+                Receipt = new Receipt
+                {
+                    ShopId = shopId,
+                    Cost = products.Sum(item => item.Cost* item.Count),
+                    Count = products.Sum(item => item.Count),
+                    Date = DateTime.Now
+                }
+            };
+           return Task.FromResult(response);
         }
         public async Task AddProductsByFactory(ICollection<ProductByFactory> products)
         {
@@ -79,7 +100,7 @@ namespace Shops.Domain.Services
                 .FirstOrDefaultAsync(shopContext => shopContext.Id == shopId);
             products.ForEach(product =>
             {
-                var productContext = shop.Products.FirstOrDefault(item => item.ProductId == product.ProductId);
+                var productContext = shop.Products.FirstOrDefault(item => item.Id == product.ProductId);
                 if (productContext != null)
                     productContext.Count += product.Count;
             });

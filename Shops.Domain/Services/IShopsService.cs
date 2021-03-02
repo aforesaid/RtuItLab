@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using RtuItLab.Infrastructure.Models.Purchases;
 using ServicesDtoModels.Models.Shops;
 
 namespace Shops.Domain.Services
@@ -11,5 +12,6 @@ namespace Shops.Domain.Services
         public Task<ICollection<Product>> GetProductsByCategory(int shopId, string categoryName);
         public Task<(string,bool)> BuyProducts(int shopId, ICollection<Product> products);
         public Task AddProductsByFactory(ICollection<ProductByFactory> products);
+        public Task<Transaction> CreateTransaction(int shopId, ICollection<Product> products);
     }
 }
