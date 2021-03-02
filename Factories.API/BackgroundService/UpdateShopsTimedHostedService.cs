@@ -17,7 +17,7 @@ namespace Factories.API.BackgroundService
 
         private Timer _timer;
         private int _executionCount;
-        private const int TimerSeconds = 120;
+        private const int TimerSeconds = 20;
         public UpdateShopsTimedHostedService(ILogger<UpdateShopsTimedHostedService> logger,
             IBusControl busControl)
         {

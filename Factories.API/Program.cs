@@ -16,7 +16,7 @@ namespace Factories.API
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls("http://*:7004").UseStartup<Startup>();
                 })
                 .ConfigureServices(services =>
                 {
