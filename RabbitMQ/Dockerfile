@@ -9,12 +9,13 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["RabbitMQ/RabbitMQ.csproj", "RabbitMQ/"]
 COPY ["Shops.Domain/Shops.Domain.csproj", "Shops.Domain/"]
-COPY ["Shops.DAL/Shops.DAL.csproj", "Shops.DAL/"]
 COPY ["RtuItLab.Infrastructure/RtuItLab.Infrastructure.csproj", "RtuItLab.Infrastructure/"]
 COPY ["Identity.Domain/Identity.Domain.csproj", "Identity.Domain/"]
 COPY ["Identity.DAL/Identity.DAL.csproj", "Identity.DAL/"]
 COPY ["Purchases.Domain/Purchases.Domain.csproj", "Purchases.Domain/"]
 COPY ["Purchases.DAL/Purchases.DAL.csproj", "Purchases.DAL/"]
+COPY ["Factories.Domain/Factories.Domain.csproj", "Factories.Domain/"]
+COPY ["Factories.DAL/Factories.DAL.csproj", "Factories.DAL/"]
 RUN dotnet restore "RabbitMQ/RabbitMQ.csproj"
 COPY . .
 WORKDIR "/src/RabbitMQ"

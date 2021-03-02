@@ -43,7 +43,7 @@ namespace RabbitMQ
             services.AddDbContext<ShopsDbContext>(
                 option => option.UseInMemoryDatabase("shops"), ServiceLifetime.Transient);
             services.AddDbContext<FactoriesDbContext>(options =>
-                options.UseInMemoryDatabase("factories"));
+                options.UseInMemoryDatabase("factories"), ServiceLifetime.Transient);
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 8;
