@@ -65,7 +65,7 @@ namespace Purchases.FunctionalTests
             using var client = server.CreateClient();
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_token}");
             var content = new StringContent(BuildTransaction(), Encoding.UTF8, RequestType);
-            var response = await client.PutAsync(Post.AddTransaction, content);
+            var response = await client.PostAsync(Post.AddTransaction, content);
             response.EnsureSuccessStatusCode();
         }
         private async Task<string> GetToken()
