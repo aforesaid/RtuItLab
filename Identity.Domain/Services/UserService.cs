@@ -33,17 +33,15 @@ namespace Identity.Domain.Services
         public async Task<AuthenticateResponse> Authenticate(LoginRequest model)
         {
             var user = await _userManager.FindByNameAsync(model.Username);
-            if (user != null && await ValidateUser(user,model.Password))
-            {
-                var token = GenerateJwtToken(user);
-                return new AuthenticateResponse(new User{Id = user.Id, Username = user.UserName}, token)
+            if (user == null || !await ValidateUser(user, model.Password))
+                return new AuthenticateResponse
                 {
-                    Success = true
+                    Success = false
                 };
-            }
-            return new AuthenticateResponse
+            var token = GenerateJwtToken(user);
+            return new AuthenticateResponse(new User{Id = user.Id, Username = user.UserName}, token)
             {
-                Success = false
+                Success = true
             };
         }
 
