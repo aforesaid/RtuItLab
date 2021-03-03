@@ -1,26 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using Purchases.FunctionalTests.Base;
 using System.Threading.Tasks;
 using Identity.FunctionalTests.Base;
 using Microsoft.AspNetCore.TestHost;
 using RtuItLab.Infrastructure.Models.Identity;
-using RtuItLab.Infrastructure.Models.Purchases;
 using RtuItLab.Infrastructure.Models.Shops;
+using Shops.FunctionalTests.Base;
 using Xunit;
 
-namespace Purchases.FunctionalTests
+namespace Shops.FunctionalTests
 {
-    public class PurchasesScenarios : PurchasesScenariosBase
+    public class ShopsScenarios : ShopsScenariosBase
     {
         private const string RequestType = "application/json";
         private string _token;
         private TestServer _testServerIdentity;
-        public PurchasesScenarios()
+        public ShopsScenarios()
         {
             Configure().Wait();
         }
@@ -29,43 +26,36 @@ namespace Purchases.FunctionalTests
             _testServerIdentity = new Identity.FunctionalTests.IdentityScenarios().CreateServer();
             _token = await GetToken();
         }
-
         [Fact]
-        public async Task Get_All_History_User_response_ok_status_code()
+        public async Task Get_all_shops_response_ok_status_code()
         {
             using var server = CreateServer();
-            using var client = server.CreateClient();
-            client.DefaultRequestHeaders.Add("Authorization",$"Bearer {_token}");
-            var response = await client.GetAsync(Get.AllHistory);
+            var response = await server.CreateClient().GetAsync(Get.AllShops);
             response.EnsureSuccessStatusCode();
         }
         [Fact]
-        public async Task Get_Transaction_User_By_Id_response_ok_status_code()
+        public async Task Get_products_in_shop_response_ok_status_code()
+        {
+            using var server = CreateServer();
+            var response = await server.CreateClient().GetAsync(Get.ProductsInShop);
+            response.EnsureSuccessStatusCode();
+        }
+        [Fact]
+        public async Task Post_find_products_in_first_shop_by_category_response_ok_status_code()
+        {
+            using var server = CreateServer();
+            var content = new StringContent(BuildCategoryRequest(), Encoding.UTF8, RequestType);
+            var response = await server.CreateClient().PostAsync(Post.FindProductsInFirstShopByCategory,content);
+            response.EnsureSuccessStatusCode();
+        }
+        [Fact]
+        public async Task Post_buy_products_response_ok_status_code()
         {
             using var server = CreateServer();
             using var client = server.CreateClient();
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_token}");
-            var response = await client.GetAsync(Get.TransactionById);
-            response.EnsureSuccessStatusCode();
-        }
-        [Fact]
-        public async Task Put_Update_Transaction_response_ok_status_code()
-        {
-            using var server = CreateServer();
-            using var client = server.CreateClient();
-            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_token}");
-            var content = new StringContent(BuildUpdateTransaction(), Encoding.UTF8, RequestType);
-            var response = await client.PutAsync(Put.UpdateTransaction,content);
-            response.EnsureSuccessStatusCode();
-        }
-        [Fact]
-        public async Task Post_Add_Transaction_response_ok_status_code()
-        {
-            using var server = CreateServer();
-            using var client = server.CreateClient();
-            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_token}");
-            var content = new StringContent(BuildTransaction(), Encoding.UTF8, RequestType);
-            var response = await client.PostAsync(Post.AddTransaction, content);
+            var content = new StringContent(BuildListProducts(), Encoding.UTF8, RequestType);
+            var response = await client.PostAsync(Post.BuyProductsInFirstShop,content);
             response.EnsureSuccessStatusCode();
         }
         private async Task<string> GetToken()
@@ -86,44 +76,44 @@ namespace Purchases.FunctionalTests
             };
             return JsonSerializer.Serialize(user);
         }
-        private static string BuildTransaction()
+        private static string BuildCategoryRequest()
         {
-            var transaction = new Transaction
+            var response = new Category
             {
-                Id = 3,
-                Products = new List<Product>
-                {
-                    new Product()
-                    {
-                        Name = "string",
-                        ProductId = 100,
-                        Count = 1,
-                        Cost = 123,
-                        Category = "самса"
-                    }
-                },
-                Date = DateTime.Now,
-                TransactionType = TransactionTypes.InCash,
-                IsShopCreate = false
+                CategoryName = "Очки"
             };
-            return JsonSerializer.Serialize(transaction);
-        }
-        private static string BuildUpdateTransaction()
-        {
-            var transaction = new UpdateTransaction()
-            {
-                Id = 1,
-                TransactionType = TransactionTypes.ByCard,
-            };
-            return JsonSerializer.Serialize(transaction);
+            return JsonSerializer.Serialize(response);
         }
 
+        private static string BuildListProducts()
+        {
+            var response = new List<Product>
+            {
+                new Product
+                {
+                    Category = "шаурмички",
+                    Count = 1,
+                    Cost = 3,
+                    Name = "шавуха",
+                    ProductId = 1
+                },
+                new Product
+                {
+                    ProductId = 2,
+                    Category = "шаурмички",
+                    Count = 100,
+                    Name = "пирожки",
+                    Cost = 1
+                }
+            };
+            return JsonSerializer.Serialize(response);
+        }
         private static T DeserializeResponse<T>(string content)
             => JsonSerializer.Deserialize<T>(content, new JsonSerializerOptions()
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
-        ~PurchasesScenarios()
+        ~ShopsScenarios()
         {
             _testServerIdentity.Dispose();
         }
