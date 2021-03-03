@@ -33,8 +33,7 @@ namespace Purchases.Domain.Services
         {
             await CheckUserIsCreate(user);
             var customer = await _context.Customers.FirstOrDefaultAsync(item => item.CustomerId == user.Id);
-            var f = transaction.ToTransactionContext();
-            customer.Transactions.Add(f);
+            customer.Transactions.Add(transaction.ToTransactionContext());
             await _context.SaveChangesAsync();
         }
 
@@ -82,6 +81,7 @@ namespace Purchases.Domain.Services
                 if (updateTransaction.Products != null || updateTransaction.Date != new DateTime())
                     return "You can't change current shop's transaction!";
                 transactionContext.TransactionType = updateTransaction.TransactionType;
+                await _context.SaveChangesAsync();
             }
             else
                 await UpdateUserTransaction(transactionContext, updateTransaction);
