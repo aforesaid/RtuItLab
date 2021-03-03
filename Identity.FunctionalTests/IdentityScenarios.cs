@@ -31,7 +31,7 @@ namespace Identity.FunctionalTests
         public async Task Get_user_info_response_ok_status_code()
         {
             using var server = CreateServer();
-            var client = server.CreateClient();
+            using var client = server.CreateClient();
             var content = new StringContent(BuildUser(), Encoding.UTF8, RequestType);
             var response = await client.PostAsync(Post.Login, content);
             var contentString = await response.Content.ReadAsStringAsync();
@@ -49,7 +49,7 @@ namespace Identity.FunctionalTests
             };
             return JsonSerializer.Serialize(user);
         }
-        private static AuthenticateResponse DeserializeUserResponse(string content)
+        public static AuthenticateResponse DeserializeUserResponse(string content)
             => JsonSerializer.Deserialize<AuthenticateResponse>(content, new JsonSerializerOptions(){
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 });
