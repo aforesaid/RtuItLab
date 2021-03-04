@@ -1,13 +1,14 @@
 ﻿using MassTransit;
 using Microsoft.AspNetCore.Mvc;
-using Shops.API.Helpers;
+using RtuItLab.Infrastructure.Filters;
+using RtuItLab.Infrastructure.MassTransit;
+using RtuItLab.Infrastructure.MassTransit.Shops.Requests;
+using RtuItLab.Infrastructure.Models;
+using RtuItLab.Infrastructure.Models.Identity;
+using RtuItLab.Infrastructure.Models.Shops;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using RtuItLab.Infrastructure.MassTransit.Shops.Requests;
-using RtuItLab.Infrastructure.MassTransit.Shops.Responses;
-using RtuItLab.Infrastructure.Models.Identity;
-using RtuItLab.Infrastructure.Models.Shops;
 
 namespace Shops.API.Controllers
 {
@@ -25,35 +26,30 @@ namespace Shops.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllShops()
         {
-            var client = _busControl.CreateRequestClient<GetAllShopsRequest>(_rabbitMqUrl);
-            var response = await client.GetResponse<GetAllShopsResponse>(new GetAllShopsRequest
-            {
-                User = new User()
-            });
-            return Ok(response.Message);
+            var response = await GetResponseRabbitTask<GetAllShopsRequest, List<Shop>>(new GetAllShopsRequest());
+            return Ok(ApiResult<List<Shop>>.Success200(response));
         }
 
         [HttpGet("{shopId}")]
         public async Task<IActionResult> GetProducts(int shopId)
         {
-            var client = _busControl.CreateRequestClient<GetProductsRequest>(_rabbitMqUrl);
-            var response = await client.GetResponse<GetProductsResponse>(new GetProductsRequest{
-            ShopId = shopId
+            var response = await GetResponseRabbitTask<GetProductsRequest, List<Product>>(new GetProductsRequest
+            {
+                ShopId = shopId,
             });
-            return Ok(response.Message);
+            return Ok(ApiResult<List<Product>>.Success200(response));
         }
 
         [HttpPost("{shopId}/find_by_category")]
         public async Task<IActionResult> GetProductsByCategory(int shopId, [FromBody] Category category)
         {
             if (!ModelState.IsValid) return BadRequest();
-            var client = _busControl.CreateRequestClient<GetProductsByCategoryRequest>(_rabbitMqUrl);
-            var response = await client.GetResponse<GetProductsResponse>(new GetProductsByCategoryRequest
+            var response = await GetResponseRabbitTask<GetProductsByCategoryRequest, List<Product>>(new GetProductsByCategoryRequest
             {
                 ShopId = shopId,
                 Category = category.CategoryName
             });
-            return Ok(response.Message);
+            return Ok(ApiResult<List<Product>>.Success200(response));
         }
 
         [Authorize]
@@ -62,16 +58,21 @@ namespace Shops.API.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
             var user = HttpContext.Items["User"] as User;
-            var client = _busControl.CreateRequestClient<BuyProductsRequest>(_rabbitMqUrl);
-            var response = await client.GetResponse<BuyProductsResponse>(new BuyProductsRequest
+            await GetResponseRabbitTask<BuyProductsRequest,BaseResponseMassTransit>(new BuyProductsRequest()
             {
                 User = user,
                 ShopId = shopId,
-                Products = products
-            }); 
-            if (response.Message.Success)
-                return Ok(response.Message);
-            return BadRequest(response.Message);
+                Products = products,
+            });
+            return Ok(ApiResult<int>.Success200(shopId));
+        }
+        private async Task<TOut> GetResponseRabbitTask<TIn, TOut>(TIn request)
+            where TIn : class
+            where TOut : class
+        {
+            var client = _busControl.CreateRequestClient<TIn>(_rabbitMqUrl);
+            var response = await client.GetResponse<ResponseMassTransit<TOut>>(request);
+            return response.Message.Content ?? throw response.Message.Exception;
         }
     }
 }
