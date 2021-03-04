@@ -10,6 +10,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using RtuItLab.Infrastructure.Exceptions;
+using RtuItLab.Infrastructure.MassTransit;
 
 namespace Identity.Domain.Services
 {
@@ -30,43 +32,49 @@ namespace Identity.Domain.Services
             _appSettings   = appSettings.Value;
         }
 
-        public async Task<AuthenticateResponse> Authenticate(LoginRequest model)
+        public async Task<ResponseMassTransit<AuthenticateResponse>> Authenticate(AuthenticateRequest model)
         {
+            var response = new ResponseMassTransit<AuthenticateResponse>();
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user == null || !await ValidateUser(user, model.Password))
-                return new AuthenticateResponse
-                {
-                    Success = false
-                };
-            var token = GenerateJwtToken(user);
-            return new AuthenticateResponse(new User{Id = user.Id, Username = user.UserName}, token)
+                response.Exception = new BadRequestException("Invalid login or password!");
+            else
             {
-                Success = true
-            };
+                var token = GenerateJwtToken(user);
+                response.Content = new AuthenticateResponse(new User {Id = user.Id, Username = user.UserName},
+                    token);
+            }
+            return response;
         }
 
-        public async Task<User> GetUserById(string id)
+        public async Task<ResponseMassTransit<User>> GetUserById(string id)
         {
+            var response = new ResponseMassTransit<User>();
             var user = await _userManager.FindByIdAsync(id);
-            var userDto = new User
-            {
-                Id = user.Id,
-                Username = user.UserName
-            };
-            return userDto;
+            if (user is null)
+                response.Exception = new BadRequestException("User not found!");
+            else
+                response.Content = new User
+                {
+                    Id = user.Id,
+                    Username = user.UserName
+                };
+            return response;
         }
-        public async Task<IdentityResult> CreateUser(AuthenticateRequest model)
+        public async Task<ResponseMassTransit<IdentityResult>> CreateUser(RegisterRequest model)
         {
+            var response = new ResponseMassTransit<IdentityResult>();
             var applicationUser = new ApplicationUser()
             {
                 UserName = model.Username
             };
-            var response = await _userManager.CreateAsync(applicationUser, model.Password);
+            response.Content = await _userManager.CreateAsync(applicationUser, model.Password);
             return response;
         }
 
-        public async Task<User> GetUserByToken(TokenRequest model)
+        public async Task<ResponseMassTransit<User>> GetUserByToken(TokenRequest model)
         {
+            var response = new ResponseMassTransit<User>();
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
@@ -82,13 +90,18 @@ namespace Identity.Domain.Services
                 var jwtToken = validatedToken as JwtSecurityToken;
                 var userId = jwtToken?.Claims.First(item => item.Type == "id").Value;
                 var user = await  GetUserById(userId);
-                return user;
+                if (user.Exception != null)
+                    response.Exception = user.Exception;
+                else
+                    response.Content = user.Content;
             }
             catch (Exception e)
             {
                 _logger.LogInformation(e.Message);
-                return new User();
+                response.Exception = new BadRequestException("Invalid request token!");
             }
+
+            return response;
         }
 
         private async Task<bool> ValidateUser(ApplicationUser user, string password)
