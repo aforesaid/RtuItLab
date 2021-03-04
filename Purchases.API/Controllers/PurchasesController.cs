@@ -1,12 +1,15 @@
 ﻿using MassTransit;
 using Microsoft.AspNetCore.Mvc;
-using Purchases.API.Helpers;
+using RtuItLab.Infrastructure.Exceptions;
+using RtuItLab.Infrastructure.Filters;
+using RtuItLab.Infrastructure.MassTransit;
 using RtuItLab.Infrastructure.MassTransit.Purchases.Requests;
 using RtuItLab.Infrastructure.MassTransit.Purchases.Responses;
+using RtuItLab.Infrastructure.Models;
 using RtuItLab.Infrastructure.Models.Identity;
 using RtuItLab.Infrastructure.Models.Purchases;
 using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Purchases.API.Controllers
@@ -27,51 +30,55 @@ namespace Purchases.API.Controllers
         public async Task<IActionResult> GetAllHistory()
         {
             var user = HttpContext.Items["User"] as User;
-            var client = _busControl.CreateRequestClient<User>(_rabbitMqUrl);
-            var response = await client.GetResponse<GetTransactionsResponse>(user);
-            return Ok(response.Message);
+            var response = await GetResponseRabbitTask<User, ICollection<Transaction>>(user);
+            return Ok(ApiResult<ICollection<Transaction>>.Success200(response));
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetHistory(int id)
         {
             var user = HttpContext.Items["User"] as User;
-            var client = _busControl.CreateRequestClient<GetTransactionByIdRequest>(_rabbitMqUrl);
-            var response = await client.GetResponse<Transaction>(new GetTransactionByIdRequest
-            {
-                User = user,
-                Id = id
+            var response = await GetResponseRabbitTask<GetTransactionByIdRequest, Transaction>(new GetTransactionByIdRequest{
+            Id = id,
+            User = user
             });
-            return Ok(response.Message);
+            return Ok(ApiResult<Transaction>.Success200(response));
         }
         [HttpPost("add")]
         public async Task<IActionResult> AddTransaction([FromBody] Transaction transaction)
         {
-            if (!ModelState.IsValid) return BadRequest("Invalid request");
+            if (!ModelState.IsValid)
+                throw new BadRequestException("Invalid request");
             var user     = HttpContext.Items["User"] as User;
             if (transaction.IsShopCreate)
-                return BadRequest(new ValidationException("You can't add shops' transaction"));
+                throw new BadRequestException("You can't add shops' transaction");
             if (transaction.Receipt != null)
-                return BadRequest(new ValidationException("Receipt must be null! Use \"receipt\":null in your request"));
-            var client = _busControl.CreateRequestClient<AddTransactionRequest>(_rabbitMqUrl);
-            var response = await client.GetResponse<AddTransactionResponse>(new AddTransactionRequest()
+                throw new BadRequestException(@"Receipt must be null! Use ""receipt"":null in your request");
+            await GetResponseRabbitTask<AddTransactionRequest, BaseResponseMassTransit>(new AddTransactionRequest()
             {
                 User = user,
                 Transaction = transaction
             });
-            return Ok(response.Message);
+            return Ok(ApiResult<int>.Success200(transaction.Id));
         }
         [HttpPut("update")]
         public async Task<IActionResult> UpdateTransaction( [FromBody] UpdateTransaction updateTransaction)
         {
             if (!ModelState.IsValid) return BadRequest("Invalid request");
             var user = HttpContext.Items["User"] as User;
-            var client = _busControl.CreateRequestClient<UpdateTransactionRequest>(_rabbitMqUrl);
-            var response = await client.GetResponse<UpdateTransactionResponse>(new UpdateTransactionRequest()
+            await GetResponseRabbitTask<UpdateTransactionRequest, BaseResponseMassTransit>(new UpdateTransactionRequest()
             {
                 User = user,
                 Transaction = updateTransaction
             });
-            return Ok(response.Message);
+            return Ok(ApiResult<int>.Success200(updateTransaction.Id));
+        }
+        private async Task<TOut> GetResponseRabbitTask<TIn, TOut>(TIn request)
+            where TIn : class
+            where TOut : class
+        {
+            var client = _busControl.CreateRequestClient<TIn>(_rabbitMqUrl);
+            var response = await client.GetResponse<ResponseMassTransit<TOut>>(request);
+            return response.Message.Content ?? throw response.Message.Exception;
         }
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Purchases.API.Helpers;
+using RtuItLab.Infrastructure.Middlewares;
 using System;
 using System.Collections.Generic;
 
@@ -81,6 +81,7 @@ namespace Purchases.API
                               }
                              );
             app.UseRouting();
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseMiddleware<JwtMiddleware>();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
