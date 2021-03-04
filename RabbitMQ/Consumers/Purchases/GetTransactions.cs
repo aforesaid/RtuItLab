@@ -16,10 +16,7 @@ namespace RabbitMQ.Consumers.Purchases
         public async Task Consume(ConsumeContext<User> context)
         {
             var order = await PurchasesService.GetTransactions(context.Message);
-            await context.RespondAsync(new GetTransactionsResponse{
-                Transactions = order.ToList(),
-                Count = order.Count
-            });
+            await context.RespondAsync(order);
         }
     }
 }

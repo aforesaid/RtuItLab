@@ -16,12 +16,7 @@ namespace RabbitMQ.Consumers.Shops
         public async Task Consume(ConsumeContext<GetProductsRequest> context)
         {
             var order = await ShopsService.GetProductsByShop(context.Message.ShopId);
-            var response = new GetProductsResponse
-            {
-                Products = order?.ToList(),
-                Success = order != null
-            };
-            await context.RespondAsync(response);
+            await context.RespondAsync(order);
         }
     }
 }

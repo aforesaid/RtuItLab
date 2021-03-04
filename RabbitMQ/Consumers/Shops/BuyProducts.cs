@@ -18,12 +18,9 @@ namespace RabbitMQ.Consumers.Shops
 
         public async Task Consume(ConsumeContext<BuyProductsRequest> context)
         {
-            var (message,success) = await ShopsService.BuyProducts(context.Message.ShopId, context.Message.Products);
-            await context.RespondAsync(new BuyProductsResponse{
-            Success = success,
-            Message = message
-            });
-            if (success)
+            var order = await ShopsService.BuyProducts(context.Message.ShopId, context.Message.Products);
+            await context.RespondAsync(order);
+            if (order.Exception is null)
             {
                 var transaction =
                     await ShopsService.CreateTransaction(context.Message.ShopId, context.Message.Products);

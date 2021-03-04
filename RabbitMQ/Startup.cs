@@ -123,13 +123,6 @@ namespace RabbitMQ
                         });
                         cfg.ConfigureJsonSerializer(settings =>
                         {
-                            settings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                            return settings;
-                        });
-
-                        cfg.ConfigureJsonDeserializer(settings =>
-                        {
-                            settings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
                             return settings;
                         });
                     });

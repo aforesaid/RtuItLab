@@ -2,24 +2,21 @@
 using MassTransit;
 using Microsoft.Extensions.Logging;
 using RtuItLab.Infrastructure.Models.Identity;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace RabbitMQ.Consumers.Identity
 {
-    public class CreateUser : IdentityBaseConsumer, IConsumer<AuthenticateRequest>
-    {
-        private readonly ILogger<CreateUser> _logger;
-        public CreateUser(IUserService userService, ILogger<CreateUser> logger) : base(userService)
+    public class CreateUser : IdentityBaseConsumer<CreateUser>, IConsumer<RegisterRequest>
+    { 
+        public CreateUser(IUserService userService,
+            ILogger<CreateUser> logger) : base(userService, logger)
         {
-            _logger = logger;
         }
 
-        public async Task Consume(ConsumeContext<AuthenticateRequest> context)
+        public async Task Consume(ConsumeContext<RegisterRequest> context)
         {
-            _logger.LogInformation($"Value: {context.Message.Password} {context.Message.Username}");
+            Logger.LogInformation($"Value: {context.Message.Password} {context.Message.Username}");
             var order = await UserService.CreateUser(context.Message);
-            _logger.LogInformation($"Count error: {order.Errors.Count()}");
             await context.RespondAsync(order);
         }
     }

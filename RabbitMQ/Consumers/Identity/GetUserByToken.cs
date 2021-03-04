@@ -1,13 +1,15 @@
-﻿using System.Threading.Tasks;
-using Identity.Domain.Services;
+﻿using Identity.Domain.Services;
 using MassTransit;
+using Microsoft.Extensions.Logging;
 using RtuItLab.Infrastructure.Models.Identity;
+using System.Threading.Tasks;
 
 namespace RabbitMQ.Consumers.Identity
 {
-    public class GetUserByToken : IdentityBaseConsumer, IConsumer<TokenRequest>
+    public class GetUserByToken : IdentityBaseConsumer<GetUserByToken>, IConsumer<TokenRequest>
     {
-        public GetUserByToken(IUserService userService) : base(userService)
+        public GetUserByToken(IUserService userService,
+            ILogger<GetUserByToken> logger) : base(userService, logger)
         {
         }
 

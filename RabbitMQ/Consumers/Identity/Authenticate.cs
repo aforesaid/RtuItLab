@@ -6,18 +6,16 @@ using System.Threading.Tasks;
 
 namespace RabbitMQ.Consumers.Identity
 {
-    public class Authenticate : IdentityBaseConsumer, IConsumer<LoginRequest>
+    public class Authenticate : IdentityBaseConsumer<Authenticate>, IConsumer<AuthenticateRequest>
     {
-        private readonly ILogger<Authenticate> _logger;
-
-        public Authenticate(IUserService userService, ILogger<Authenticate> logger) : base(userService)
+        public Authenticate(IUserService userService,
+            ILogger<Authenticate> logger) : base(userService, logger)
         {
-            _logger = logger;
         }
 
-        public async Task Consume(ConsumeContext<LoginRequest> context)
+        public async Task Consume(ConsumeContext<AuthenticateRequest> context)
         {
-            _logger.LogInformation($"Value: {context.Message.Password} {context.Message.Username}");
+            Logger.LogInformation($"Value: {context.Message.Password} {context.Message.Username}");
             var order = await UserService.Authenticate(context.Message);
             await context.RespondAsync(order);
         }
