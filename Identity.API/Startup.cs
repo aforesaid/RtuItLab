@@ -1,4 +1,3 @@
-using Identity.API.Helpers;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,8 +5,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using RtuItLab.Infrastructure.Middlewares;
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Identity.API
 {
@@ -65,7 +66,18 @@ namespace Identity.API
                 {
 
                     cfg.Host(new Uri("rabbitmq://host.docker.internal/"));
+                    cfg.ConfigureJsonSerializer(settings =>
+                    {
+                        //settings.TypeNameHandling = TypeNameHandling.Auto;
+                        return settings;
+                    });
+                    cfg.ConfigureJsonDeserializer(settings =>
+                    {
+                        settings.TypeNameHandling = TypeNameHandling.All;
+                        return settings;
+                    });
                 });
+
             });
             services.AddMassTransitHostedService();
         }
@@ -79,6 +91,7 @@ namespace Identity.API
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity.API V1");
                 });
             app.UseRouting();
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseMiddleware<JwtMiddleware>();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }

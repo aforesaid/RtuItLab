@@ -1,7 +1,9 @@
-﻿using Identity.API.Helpers;
-using MassTransit;
+﻿using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using RtuItLab.Infrastructure.Filters;
+using RtuItLab.Infrastructure.MassTransit;
+using RtuItLab.Infrastructure.Models;
 using RtuItLab.Infrastructure.Models.Identity;
 using System;
 using System.Threading.Tasks;
@@ -23,20 +25,16 @@ namespace Identity.API.Controllers
         public async Task<IActionResult> Login([FromBody] AuthenticateRequest model)
         {
             if (!ModelState.IsValid) return BadRequest();
-            var client = _busControl.CreateRequestClient<LoginRequest>(_rabbitMqUrl);
-            var response = await client.GetResponse<AuthenticateResponse>(model);
-            if (response.Message.Success)
-                return Ok(response.Message);
-            return BadRequest(new {message = "Username or password is incorrect"});
+            var response = await GetResponseRabbitTask<AuthenticateRequest, AuthenticateResponse>(model);
+            return Ok(ApiResult<AuthenticateResponse>.Success200(response));
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] AuthenticateRequest model)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest model)
         {
             if (!ModelState.IsValid) return BadRequest();
-            var client = _busControl.CreateRequestClient<AuthenticateRequest>(_rabbitMqUrl);
-            var response = await client.GetResponse<IdentityResult>(model);
-            return Ok(response.Message);
+            var response = await GetResponseRabbitTask<RegisterRequest, IdentityResult>(model);
+            return Ok(ApiResult<IdentityResult>.Success200(response));
         }
 
         [HttpGet("user")]
@@ -44,7 +42,16 @@ namespace Identity.API.Controllers
         public IActionResult GetUser()
         {
             var user = HttpContext.Items["User"] as User;
-            return Ok(user);
+            return Ok(ApiResult<User>.Success200(user));
+        }
+
+        private async Task<TOut> GetResponseRabbitTask<TIn,TOut>(TIn request)
+        where TIn: class
+        where TOut: class
+        {
+            var client = _busControl.CreateRequestClient<TIn>(_rabbitMqUrl);
+            var response = await client.GetResponse<ResponseMassTransit<TOut>>(request);
+            return response.Message.Content ?? throw response.Message.Exception;
         }
     }
 }
