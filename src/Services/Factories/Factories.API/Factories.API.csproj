@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>c2205f3e-b8bd-46d5-80c1-bafb80b74237</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..\..</DockerfileContext>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit.AspNetCore" Version="7.1.6" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.1.6" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.1.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\RtuItLab.Infrastructure\RtuItLab.Infrastructure.csproj" />
+  </ItemGroup>
+
+
+</Project>

@@ -1,0 +1,49 @@
+version: '3.4'
+
+services:
+  rabbit:
+      hostname: rabbit
+      image: rabbitmq:3.6.1-management
+      ports:
+         - "5672:5672" 
+         - "15672:15672"  
+  apigateway:
+    image: bezlla/apigateway
+    build:
+      context: .
+      dockerfile: RtuItLab.ApiGateway/Dockerfile
+    ports:
+      - 5000:5000
+  rabbitmqs:
+        image: rabbit
+        build:
+            context: .
+            dockerfile: RabbitMQ/Dockerfile
+  identityapi:
+        image: bezlla/identityapi
+        build:
+            context: .
+            dockerfile: Services/Identity/Identity.API/Dockerfile
+        ports:
+            - 7001:7001
+  purchasesapi:
+        image: bezlla/purchasesapi
+        build:
+            context: .
+            dockerfile: Services/Purchases/Purchases.API/Dockerfile
+        ports:
+            - 7002:7002
+  shopsapi:
+        image: bezlla/shopsapi
+        build:
+            context: .
+            dockerfile: Services/Shops/Shops.API/Dockerfile
+        ports:
+            - 7003:7003
+  factoriesapi:
+        image: bezlla/factories
+        build:
+            context: .
+            dockerfile: Services/Factories/Factories.API/Dockerfile
+        ports:
+            - 7004:7004

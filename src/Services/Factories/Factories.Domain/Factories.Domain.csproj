@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\RtuItLab.Infrastructure\RtuItLab.Infrastructure.csproj" />
+    <ProjectReference Include="..\Factories.DAL\Factories.DAL.csproj" />
+  </ItemGroup>
+
+</Project>
