@@ -7,8 +7,9 @@ namespace Factories.DAL.ContextModels
     {
         [Key]
         public int Id { get; set; }
-        [ForeignKey("FactoryKey")]
-        public int FactoryKey { get; set; }
+        [ForeignKey("FactoryContextKey")]
+        public FactoryContext Factory { get; set; }
+        public int FactoryContextKey { get; set; }
         public int ShopId { get; set; }
         public int ProductId { get; set; }
         public int PartsOfCreate { get; set; } 

@@ -10,8 +10,8 @@ namespace Purchases.DAL.ContextModels
     {
         [Key]
         public int Id { get; set; }
-        [ForeignKey("CustomerKey")]
-        public int CustomerKey { get; set; }
+        [ForeignKey("CustomerContextKey")]
+        public int CustomerContextKey { get; set; }
         public List<ProductContext> Products { get; set; } = new List<ProductContext>();
         public DateTime Date { get; set; }
         public TransactionTypes TransactionType { get; set; } = TransactionTypes.InCash;

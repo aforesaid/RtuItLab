@@ -16,51 +16,97 @@ namespace Shops.DAL.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ShopContext>().HasData(new ShopContext
-                {
-                    Id = 1,
-                    PhoneNumber = "+77777777777",
-                    Address = "Москва, ул. Первозданного 36",
-                }, new ShopContext
-                {
-                    Id = 2,
-                    PhoneNumber = "+99999999999",
-                    Address = "Орёл, ул. Первозданного 36",
-                });
+            {
+                Id = 1,
+                PhoneNumber = "79788994545",
+                Address = "Москва, ул. Первозданного 36",
+            }, new ShopContext
+            {
+                Id = 2,
+                PhoneNumber = "79788992113",
+                Address = "Орёл, ул. Маршалла 36"
+            }, new ShopContext
+            {
+                Id = 3,
+                PhoneNumber = "79788992553",
+                Address = "Москва, ул. Первомайская 36"
+            });
 
             modelBuilder.Entity<ProductContext>().HasData(new ProductContext
             {
                 ShopContextKey = 1,
                 Id = 1,
-                Category = "шаурмички",
+                Category = "одежда",
                 Count = 100,
-                Name = "шавуха",
-                Cost = 2
+                Name = "Трусы",
+                Cost = 123.12m
             }, new ProductContext
             {
                 ShopContextKey = 1,
                 Id = 2,
-                Category = "шаурмички",
+                Category = "одежда",
                 Count = 100,
-                Name = "пирожки",
+                Name = "Штаны",
                 Cost = 1
             }, new ProductContext
             {
+                ShopContextKey = 1,
                 Id = 3,
-                Category = "шаурмичка",
-                ShopContextKey = 2,
+                Category = "обувь",
                 Count = 100,
-                Name = "шавухи",
-                Cost = 2
+                Name = "Бутекс",
+                Cost = 2123
             }, new ProductContext
             {
-                ShopContextKey = 2,
+                ShopContextKey = 1,
                 Id = 4,
-                Category = "шаурмички",
+                Category = "обувь",
                 Count = 100,
-                Name = "пирожки",
-                Cost = 1
-            });
-        }
+                Name = "Шлепанцы",
+                Cost = 122
+            }, new ProductContext 
+            {
+                ShopContextKey = 2,
+                Id = 5,
+                Category = "обувь",
+                Count = 100,
+                Name = "Ботильоны",
+                Cost = 50
 
+            }, new ProductContext 
+            {
+                ShopContextKey = 2,
+                Id = 6,
+                Category = "еда",
+                Count = 100,
+                Name = "Чебурек",
+                Cost = 50
+            }, new ProductContext 
+            {
+                ShopContextKey = 2,
+                Id = 7,
+                Category = "еда",
+                Count = 1002,
+                Name = "Самса",
+                Cost = 50
+            }, new ProductContext 
+            {
+                ShopContextKey = 3,
+                Id = 8,
+                Category = "строительные материалы",
+                Count = 100,
+                Name = "Кирпич",
+                Cost = 50
+            }, new ProductContext
+            {
+                ShopContextKey = 3,
+                Id = 9,
+                Category = "строительные материалы",
+                Count = 23,
+                Name = "Асфальт",
+                Cost = 50
+            }
+            );
+        }
     }
 }

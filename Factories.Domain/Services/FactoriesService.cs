@@ -3,6 +3,7 @@ using Factories.Domain.Helpers;
 using Microsoft.EntityFrameworkCore;
 using RtuItLab.Infrastructure.Models.Shops;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Factories.Domain.Services
@@ -20,6 +21,7 @@ namespace Factories.Domain.Services
         private async Task<ICollection<ProductByFactory>> UpdateFactoriesStage()
         {
             var result = new List<ProductByFactory>();
+            var pro = _context.Factories.Include(item => item.Products).First();
             await _context.Factories.Include(item => item.Products).ForEachAsync(factory =>
             {
                 factory.Products.ForEach(product =>
