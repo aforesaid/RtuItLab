@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using RtuItLab.Infrastructure.Exceptions;
 using RtuItLab.Infrastructure.Models.Shops;
 
 namespace RtuItLab.Infrastructure.Models.Purchases
@@ -24,11 +25,17 @@ namespace RtuItLab.Infrastructure.Models.Purchases
         {
             var employee = (Transaction)value;
             if (employee.Products == null || employee.Products?.Count == 0)
-                return new ValidationResult("Invalid Products: Products can't be null");
+                throw new BadRequestException("Invalid Products: Products can't be null");
             if (!employee.IsShopCreate)
+            {
+                if (employee.Receipt != null)
+                    throw new BadRequestException(@"Receipt must be null! Use ""receipt"":null in your request");
+
                 return ValidationResult.Success;
+            }
+
             if (employee.Receipt == null || employee.Receipt.Cost == default || employee.Receipt.ShopId == default)
-                return new ValidationResult("Invalid Receipt value");
+                throw new BadRequestException("Invalid Receipt value");
             return ValidationResult.Success;
         }
     }

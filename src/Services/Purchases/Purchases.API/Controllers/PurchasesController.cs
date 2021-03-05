@@ -46,13 +46,11 @@ namespace Purchases.API.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> AddTransaction([FromBody] Transaction transaction)
         {
+            if (transaction.IsShopCreate)
+                throw new BadRequestException("You can't add shops' transaction");
             if (!ModelState.IsValid)
                 throw new BadRequestException("Invalid request");
             var user     = HttpContext.Items["User"] as User;
-            if (transaction.IsShopCreate)
-                throw new BadRequestException("You can't add shops' transaction");
-            if (transaction.Receipt != null)
-                throw new BadRequestException(@"Receipt must be null! Use ""receipt"":null in your request");
             await GetResponseRabbitTask<AddTransactionRequest, BaseResponseMassTransit>(new AddTransactionRequest()
             {
                 User = user,
