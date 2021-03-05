@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Identity.FunctionalTests.Base;
+﻿using Identity.FunctionalTests.Base;
 using Microsoft.AspNetCore.TestHost;
 using RtuItLab.Infrastructure.Models.Identity;
 using RtuItLab.Infrastructure.Models.Shops;
 using Shops.FunctionalTests.Base;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+using RtuItLab.Infrastructure.Models;
 using Xunit;
 
 namespace Shops.FunctionalTests
@@ -64,12 +65,12 @@ namespace Shops.FunctionalTests
             var content = new StringContent(BuildUser(), Encoding.UTF8, RequestType);
             var response = await client.PostAsync(IdentityScenariosBase.Post.Login, content);
             var contentString = await response.Content.ReadAsStringAsync();
-            var userInfo = DeserializeResponse<AuthenticateResponse>(contentString);
+            var userInfo = DeserializeResponse<ApiResult<AuthenticateResponse>>(contentString).Result;
             return userInfo.Token;
         }
         private static string BuildUser()
         {
-            var user = new AuthenticateRequest
+            var user = new RegisterRequest
             {
                 Username = "admin",
                 Password = "Pass1234"

@@ -26,30 +26,30 @@ namespace Shops.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllShops()
         {
-            var response = await GetResponseRabbitTask<GetAllShopsRequest, List<Shop>>(new GetAllShopsRequest());
-            return Ok(ApiResult<List<Shop>>.Success200(response));
+            var response = await GetResponseRabbitTask<GetAllShopsRequest, ICollection<Shop>>(new GetAllShopsRequest());
+            return Ok(ApiResult<ICollection<Shop>>.Success200(response));
         }
 
         [HttpGet("{shopId}")]
         public async Task<IActionResult> GetProducts(int shopId)
         {
-            var response = await GetResponseRabbitTask<GetProductsRequest, List<Product>>(new GetProductsRequest
+            var response = await GetResponseRabbitTask<GetProductsRequest, ICollection<Product>>(new GetProductsRequest
             {
                 ShopId = shopId,
             });
-            return Ok(ApiResult<List<Product>>.Success200(response));
+            return Ok(ApiResult<ICollection<Product>>.Success200(response));
         }
 
         [HttpPost("{shopId}/find_by_category")]
         public async Task<IActionResult> GetProductsByCategory(int shopId, [FromBody] Category category)
         {
             if (!ModelState.IsValid) return BadRequest();
-            var response = await GetResponseRabbitTask<GetProductsByCategoryRequest, List<Product>>(new GetProductsByCategoryRequest
+            var response = await GetResponseRabbitTask<GetProductsByCategoryRequest, ICollection<Product>>(new GetProductsByCategoryRequest
             {
                 ShopId = shopId,
                 Category = category.CategoryName
             });
-            return Ok(ApiResult<List<Product>>.Success200(response));
+            return Ok(ApiResult<ICollection<Product>>.Success200(response));
         }
 
         [Authorize]
