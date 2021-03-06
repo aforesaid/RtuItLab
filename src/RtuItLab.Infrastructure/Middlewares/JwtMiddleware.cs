@@ -20,7 +20,7 @@ namespace RtuItLab.Infrastructure.Middlewares
 
         public async Task Invoke(HttpContext context, IBusControl busControl)
         {
-            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(' ').Last();
+            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split().Last();
             if (token != null)
                 await AttachUserToContext(context, busControl, token);
             await _next(context);

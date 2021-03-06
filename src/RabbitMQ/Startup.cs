@@ -2,6 +2,7 @@ using Factories.DAL.Data;
 using Factories.Domain.Services;
 using Identity.DAL.ContextModels;
 using Identity.DAL.Data;
+using Identity.Domain;
 using Identity.Domain.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -46,6 +47,7 @@ namespace RabbitMQ
             services.AddScoped<IShopsService, ShopsService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IFactoriesService, FactoriesService>();
+            services.Configure<AppSettings>(Configuration);
             services.AddMassTransitConfigure();
         }
 

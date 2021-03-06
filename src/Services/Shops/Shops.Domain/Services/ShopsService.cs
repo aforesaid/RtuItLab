@@ -70,7 +70,7 @@ namespace Shops.Domain.Services
                 var shop = await _context.Shops.Include(item => item.Products)
                     .FirstOrDefaultAsync(item => item.Id == shopId);
                 if (shop is null)
-                    throw new NotFoundException("Shop not found");
+                    throw new BadRequestException("Shop not found");
                 foreach (var product in products)
                 {
                     var item = shop?.Products.FirstOrDefault(productContext => productContext.Id == product.ProductId);
@@ -85,9 +85,8 @@ namespace Shops.Domain.Services
             }
             catch (Exception e)
             {
-                response.Exception = e;
+                response.Exception = new BadRequestException(e.Message);
             }
-
             return response;
         }
 
