@@ -1,6 +1,7 @@
 ﻿using GreenPipes;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using RabbitMQ.Consumers.Factories;
 using RabbitMQ.Consumers.Identity;
 using RabbitMQ.Consumers.Purchases;
@@ -80,6 +81,17 @@ namespace RabbitMQ
                         // Factories Consumer by Shops
                         e.Consumer<SubmitOrderByAddProducts>(context);
                         });
+                    cfg.ConfigureJsonSerializer(settings =>
+                    {
+                        settings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+
+                        return settings;
+                    });
+                    cfg.ConfigureJsonDeserializer(configure =>
+                    {
+                        configure.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+                        return configure;
+                    });
                 });
             });
             services.AddMassTransitHostedService();
