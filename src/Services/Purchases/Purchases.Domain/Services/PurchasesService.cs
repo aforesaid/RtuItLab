@@ -54,21 +54,17 @@ namespace Purchases.Domain.Services
         {
             await CheckUserIsCreate(user);
             var response = new ResponseMassTransit<BaseResponseMassTransit>();
-            try
-            {
                 var customer = await _context.Customers.Include(item => item.Transactions)
                     .ThenInclude(item => item.Products)
                     .FirstOrDefaultAsync(item => item.CustomerId == user.Id);
                 var currentTransaction = customer?.Transactions.FirstOrDefault(item => item.Id == transaction.Id);
                 if (currentTransaction is null)
-                    throw new NotFoundException("Transaction that is being updated was not found"); 
-                await UpdateTransaction(currentTransaction, transaction);
-                response.Content = new BaseResponseMassTransit();
-            }
-            catch (Exception e)
-            {
-                response.Exception = e;
-            }
+                   response.Exception = new NotFoundException("Transaction that is being updated was not found");
+                else
+                    response.Exception = await UpdateTransaction(currentTransaction, transaction);
+                
+                if (response.Exception is null)
+                    response.Content = new BaseResponseMassTransit();
             return response;
         }
 
@@ -97,18 +93,19 @@ namespace Purchases.Domain.Services
             }
         }
 
-        private async Task UpdateTransaction(TransactionContext transactionContext,
+        private async Task<Exception> UpdateTransaction(TransactionContext transactionContext,
             UpdateTransaction updateTransaction)
         {
             if (transactionContext.IsShopCreate)
             {
                 if (updateTransaction.Products != null || updateTransaction.Date != new DateTime())
-                    throw new BadRequestException("You can't change current shop's transaction!");
+                    return new BadRequestException("You can't change current shop's transaction!");
                 transactionContext.TransactionType = updateTransaction.TransactionType;
                 await _context.SaveChangesAsync();
             }
             else
                 await UpdateUserTransaction(transactionContext, updateTransaction);
+            return null;
         }
 
         private async Task UpdateUserTransaction(TransactionContext transactionContext,

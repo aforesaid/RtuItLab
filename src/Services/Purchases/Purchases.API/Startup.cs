@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using RtuItLab.Infrastructure.Filters;
 using RtuItLab.Infrastructure.Middlewares;
 using System;
 using System.Collections.Generic;
@@ -22,7 +24,10 @@ namespace Purchases.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(option =>
+            {
+                option.Filters.Add(typeof(ValidateModelAttribute));
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo()
@@ -65,6 +70,17 @@ namespace Purchases.API
                 {
 
                     cfg.Host(new Uri("rabbitmq://host.docker.internal/"));
+                    cfg.ConfigureJsonSerializer(settings =>
+                    {
+                        settings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+
+                        return settings;
+                    });
+                    cfg.ConfigureJsonDeserializer(configure =>
+                    {
+                        configure.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+                        return configure;
+                    });
                 });
             });
             services.AddMassTransitHostedService();
