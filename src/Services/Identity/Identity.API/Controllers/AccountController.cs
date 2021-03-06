@@ -24,7 +24,6 @@ namespace Identity.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] AuthenticateRequest model)
         {
-            if (!ModelState.IsValid) return BadRequest();
             var response = await GetResponseRabbitTask<AuthenticateRequest, AuthenticateResponse>(model);
             return Ok(ApiResult<AuthenticateResponse>.Success200(response));
         }
@@ -32,7 +31,6 @@ namespace Identity.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest model)
         {
-            if (!ModelState.IsValid) return BadRequest();
             var response = await GetResponseRabbitTask<RegisterRequest, IdentityResult>(model);
             return Ok(ApiResult<IdentityResult>.Success200(response));
         }

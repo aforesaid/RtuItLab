@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 
 namespace Factories.API
 {
@@ -26,6 +27,17 @@ namespace Factories.API
                 {
 
                     cfg.Host(new Uri("rabbitmq://host.docker.internal/"));
+                    cfg.ConfigureJsonSerializer(settings =>
+                    {
+                        settings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+
+                        return settings;
+                    });
+                    cfg.ConfigureJsonDeserializer(configure =>
+                    {
+                        configure.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
+                        return configure;
+                    });
                 });
             });
             services.AddMassTransitHostedService();
