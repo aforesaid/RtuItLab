@@ -36,7 +36,6 @@ namespace RtuItLab.Infrastructure.Middlewares
         private Task HandleException(HttpContext context, Exception ex)
         {
             _logger.LogError(ex.Message);
-            var value = ex is BadRequestException;
             var code = ex switch
             {
                 NotFoundException _ => HttpStatusCode.NotFound,
@@ -47,7 +46,10 @@ namespace RtuItLab.Infrastructure.Middlewares
 
             var errors = new List<string> { ex.Message };
 
-            var result = JsonSerializer.Serialize(ApiResult<string>.Failure((int)code, errors));
+            var result = JsonSerializer.Serialize(ApiResult<string>.Failure((int)code, errors),new JsonSerializerOptions()
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)code;

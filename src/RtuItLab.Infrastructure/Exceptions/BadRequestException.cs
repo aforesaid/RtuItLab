@@ -6,10 +6,5 @@ namespace RtuItLab.Infrastructure.Exceptions
     {
         public BadRequestException(string message) : base(message)
         { }
-
-        public BadRequestException()
-        {
-            
-        }
     }
 }

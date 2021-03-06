@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using RtuItLab.Infrastructure.Exceptions;
 using RtuItLab.Infrastructure.Models.Shops;
 
 namespace RtuItLab.Infrastructure.Models.Purchases
 {
+    [ValidateUpdateTransaction]
     public class UpdateTransaction
     {
         [Required]
@@ -22,6 +24,16 @@ namespace RtuItLab.Infrastructure.Models.Purchases
             if (employee == 0 || employee == 1)
                 return ValidationResult.Success;
             return new ValidationResult("Invalid Transaction Type");
+        }
+    }
+    public class ValidateUpdateTransaction : ValidationAttribute
+    {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            var employee = (UpdateTransaction)value;
+            if (employee.Id <= 0)
+                throw new BadRequestException("Invalid Id: Set valid transactionId");
+            return ValidationResult.Success;
         }
     }
 }

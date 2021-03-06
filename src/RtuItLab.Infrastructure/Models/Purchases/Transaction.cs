@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 using RtuItLab.Infrastructure.Exceptions;
 using RtuItLab.Infrastructure.Models.Shops;
 
@@ -10,6 +11,7 @@ namespace RtuItLab.Infrastructure.Models.Purchases
     public class Transaction
     {
         public int Id { get; set; }
+        [JsonProperty(ItemTypeNameHandling = TypeNameHandling.Auto)]
         public List<Product> Products { get; set; }
 
         public DateTime Date { get; set; }
