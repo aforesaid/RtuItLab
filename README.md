@@ -28,7 +28,7 @@
 4. [RabbitMQ](#RabbitMQ)
 5. [API Gateway (Ocelot)](#Api-Gateway-Ocelot)
 6. [Docker](#Docker)
-7. UnitTests
+7. [UnitTests](#UnitTests)
 #
 ### Функциональность проекта
 Возможности клиента:
@@ -278,7 +278,7 @@ API Gateway — это высокопроизводительный, досту�
 docker-compose pull
 docker-compose up
 ```
-Детали конфигурации docker-compose вы можете найти (здесь)[https://github.com/bezlla/RtuItLab/blob/master/src/docker-compose.yml].
+Детали конфигурации docker-compose вы можете найти [здесь](https://github.com/bezlla/RtuItLab/blob/master/src/docker-compose.yml).
 ### UnitTests
 
 На данный момент написаны только Smoke - тесты, дя запуска которых необходимо запустить менеджера RabbitMQ и [проект конфигурации RabbitMQ](https://github.com/bezlla/RtuItLab/tree/master/src/RabbitMQ).
