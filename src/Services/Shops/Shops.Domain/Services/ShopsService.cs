@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Shops.DAL.ContextModels;
 
 namespace Shops.Domain.Services
 {
@@ -59,10 +60,11 @@ namespace Shops.Domain.Services
             return response;
         }
 
-        public async Task<ResponseMassTransit<BaseResponseMassTransit>> BuyProducts(int shopId,
+        public async Task<ResponseMassTransit<ICollection<Product>>> BuyProducts(int shopId,
             ICollection<Product> products)
         {
-            var response = new ResponseMassTransit<BaseResponseMassTransit>();
+            var responseProduct = new List<Product>();
+            var response = new ResponseMassTransit<ICollection<Product>>();
             try
             {
                 if (products.Count > MaxProductRequestCount)
@@ -78,9 +80,11 @@ namespace Shops.Domain.Services
                         throw new BadRequestException(
                             $"ProductId {product.ProductId} is either not found, or there not enough of it in the store");
                     item.Count -= product.Count;
+                    var addProduct = item.ToProductDto();
+                    addProduct.Count = product.Count;
+                    responseProduct.Add(addProduct);
                 }
-
-                response.Content = new BaseResponseMassTransit();
+                response.Content = responseProduct;
                 await _context.SaveChangesAsync();
             }
             catch (Exception e)
@@ -102,7 +106,8 @@ namespace Shops.Domain.Services
                     ShopId = shopId,
                     Cost = products.Sum(item => item.Cost * item.Count),
                     Count = products.Sum(item => item.Count),
-                    Date = DateTime.Now
+                    Date = DateTime.Now,
+                    Products = products.ToList()
                 }
             };
             return Task.FromResult(response);
@@ -112,6 +117,18 @@ namespace Shops.Domain.Services
         {
             var shopsCollection = products.GroupBy(item => item.ShopId);
             shopsCollection.ToList().ForEach(async item => { await AddProductsInShop(item.Key, item.ToList()); });
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AddReceipt(Receipt receipt)
+        {
+            var receiptContext = new ReceiptContext
+            {
+                FullCost = receipt.Products.Sum(item => item.Count* item.Cost),
+                Count = receipt.Products.Sum(item => item.Count),
+                Products = new List<ProductByReceiptContext>(receipt.Products.Select(item => item.ToProductByReceiptContext()))
+            };
+            await _context.Receipts.AddAsync(receiptContext);
             await _context.SaveChangesAsync();
         }
 

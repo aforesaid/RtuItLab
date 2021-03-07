@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RtuItLab.Infrastructure.Models.Purchases;
 using Shops.DAL.ContextModels;
 
 namespace Shops.DAL.Data
@@ -12,6 +13,7 @@ namespace Shops.DAL.Data
         }
         public DbSet<ShopContext> Shops { get; set; }
         public DbSet<ProductContext> Products { get; set; }
+        public DbSet<ReceiptContext> Receipts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

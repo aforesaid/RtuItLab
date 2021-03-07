@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using RtuItLab.Infrastructure.Models.Shops;
 
 namespace RtuItLab.Infrastructure.Models.Purchases
 {
@@ -13,5 +15,6 @@ namespace RtuItLab.Infrastructure.Models.Purchases
         public int Count { get; set; }
         [Required]
         public DateTime Date { get; set; }
+        public List<Product> Products { get; set; }
     }
 }

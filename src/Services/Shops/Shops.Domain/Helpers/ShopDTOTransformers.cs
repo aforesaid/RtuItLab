@@ -31,5 +31,6 @@ namespace Shops.Domain.Helpers
                 Category = model.Category
             };
         }
+
     }
 }

@@ -58,13 +58,13 @@ namespace Shops.API.Controllers
         {
             if (!ModelState.IsValid) return BadRequest();
             var user = HttpContext.Items["User"] as User;
-            await GetResponseRabbitTask<BuyProductsRequest,BaseResponseMassTransit>(new BuyProductsRequest()
+            var productsResponse = await GetResponseRabbitTask<BuyProductsRequest,ICollection<Product>>(new BuyProductsRequest()
             {
                 User = user,
                 ShopId = shopId,
                 Products = products,
             });
-            return Ok(ApiResult<int>.Success200(shopId));
+            return Ok(ApiResult<ICollection<Product>>.Success200(products));
         }
         private async Task<TOut> GetResponseRabbitTask<TIn, TOut>(TIn request)
             where TIn : class

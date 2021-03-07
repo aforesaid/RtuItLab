@@ -11,5 +11,6 @@ namespace Shops.DAL.ContextModels
         [RegularExpression("[7-9][0-9]{9}")]
         public string PhoneNumber { get; set; }
         public List<ProductContext> Products { get; set; }
+        public List<ReceiptContext> Receipts { get; set; }
     }
 }

@@ -28,6 +28,8 @@ namespace Purchases.Domain.Services
             var response = new ResponseMassTransit<Transaction>();
             var customer = await _context.Customers.Include(item => item.Transactions)
                 .ThenInclude(item => item.Products)
+                .Include(item => item.Transactions)
+                .ThenInclude(item => item.Receipt)
                 .FirstOrDefaultAsync(item => item.CustomerId == user.Id);
             var transaction = customer?.Transactions.FirstOrDefault(item => item.Id == id);
             if (transaction is null)
@@ -73,7 +75,6 @@ namespace Purchases.Domain.Services
             await CheckUserIsCreate(user);
             var response = new ResponseMassTransit<ICollection<Transaction>>();
             var customer = await _context.Customers.Include(item => item.Transactions)
-                .ThenInclude(item => item.Receipt)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(item => item.CustomerId == user.Id);
             response.Content = customer.Transactions.Select(item => item.ToTransactionDto()).ToList();

@@ -1,7 +1,6 @@
 ﻿using MassTransit;
 using Purchases.Domain.Services;
 using RtuItLab.Infrastructure.MassTransit.Shops.Requests;
-using RtuItLab.Infrastructure.MassTransit.Shops.Responses;
 using Shops.Domain.Services;
 using System.Threading.Tasks;
 
@@ -23,7 +22,8 @@ namespace RabbitMQ.Consumers.Shops
             if (order.Exception is null)
             {
                 var transaction =
-                    await ShopsService.CreateTransaction(context.Message.ShopId, context.Message.Products);
+                    await ShopsService.CreateTransaction(context.Message.ShopId, order.Content);
+                await ShopsService.AddReceipt(transaction.Receipt);
                 await _purchasesService.AddTransaction(context.Message.User, transaction);
             }
         }
