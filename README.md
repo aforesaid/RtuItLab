@@ -196,9 +196,9 @@
  различных микросервисов. Каждый запрос попадает в Queue и обрабатывается после того, как достигает его очередь.
  Также RabbitMQ позволяет не терять запросы и взаимодействовать микросервисам друг с другом.
  
- Используется отдельный [проект](https://github.com/bezlla/RtuItLab/tree/master/src/RabbitMQ), для конфигурации RabbitMQ, который работает с помощью библиотеки MassTransit.
+ В каждом проекте в Startap'e прописаны конфигурации для соответсвующих очередей этому микросервису, которые работают с помощью библиотеки MassTransit.
  
- [Здесь](https://github.com/bezlla/RtuItLab/blob/master/src/RabbitMQ/ConfigureRabbitMQ.cs) же добавляются обработчики для очередей RabbitMQ,
+ Ниже пример добавления обработчиков (Consumer'ов) для очередей RabbitMQ,
  ```C#
   // Identity
   x.AddConsumer<Authenticate>();
