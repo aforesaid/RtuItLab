@@ -1,10 +1,9 @@
 ﻿using MassTransit;
 using Purchases.Domain.Services;
-using System.Threading.Tasks;
 using RtuItLab.Infrastructure.MassTransit.Purchases.Requests;
-using RtuItLab.Infrastructure.MassTransit.Purchases.Responses;
+using System.Threading.Tasks;
 
-namespace RabbitMQ.Consumers.Purchases
+namespace Purchases.API.Consumers
 {
     public class AddTransaction : PurchasesBaseConsumer, IConsumer<AddTransactionRequest>
     {

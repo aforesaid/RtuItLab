@@ -1,6 +1,6 @@
 ﻿using Purchases.Domain.Services;
 
-namespace RabbitMQ.Consumers.Purchases
+namespace Purchases.API.Consumers
 {
     public class PurchasesBaseConsumer
     {

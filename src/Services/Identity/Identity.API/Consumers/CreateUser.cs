@@ -1,10 +1,10 @@
-﻿using Identity.Domain.Services;
+﻿using System.Threading.Tasks;
+using Identity.Domain.Services;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 using RtuItLab.Infrastructure.Models.Identity;
-using System.Threading.Tasks;
 
-namespace RabbitMQ.Consumers.Identity
+namespace Identity.API.Consumers
 {
     public class CreateUser : IdentityBaseConsumer<CreateUser>, IConsumer<RegisterRequest>
     { 

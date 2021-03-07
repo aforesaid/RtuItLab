@@ -1,7 +1,7 @@
 ﻿using Identity.Domain.Services;
 using Microsoft.Extensions.Logging;
 
-namespace RabbitMQ.Consumers.Identity
+namespace Identity.API.Consumers
 {
     public class IdentityBaseConsumer<T>
     {

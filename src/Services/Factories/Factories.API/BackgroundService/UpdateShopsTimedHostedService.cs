@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Threading;
+using System.Linq;
 using System.Threading.Tasks;
+using Factories.Domain.Services;
 using MassTransit;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RtuItLab.Infrastructure.MassTransit.Shops.Requests;
@@ -12,17 +15,19 @@ namespace Factories.API.BackgroundService
     {
         private readonly ILogger<UpdateShopsTimedHostedService> _logger;
         private readonly IBusControl _busControl;
-
-        private readonly Uri _rabbitMqUrl = new Uri("rabbitmq://localhost/factoriesQueue");
+        private readonly IServiceProvider _services;
+        private readonly Uri _rabbitMqUrl = new Uri("rabbitmq://localhost/shopsQueue");
 
         private Timer _timer;
         private int _executionCount;
         private const int TimerSeconds = 20;
         public UpdateShopsTimedHostedService(ILogger<UpdateShopsTimedHostedService> logger,
-            IBusControl busControl)
+            IBusControl busControl,
+            IServiceProvider services)
         {
             _logger = logger;
             _busControl = busControl;
+            _services = services;
         }
 
         public Task StartAsync(CancellationToken stoppingToken)
@@ -37,8 +42,13 @@ namespace Factories.API.BackgroundService
         private async void DoWork(object state)
         {
             var count = Interlocked.Increment(ref _executionCount);
+            using var scope = _services.CreateScope();
+            var factoriesService = scope.ServiceProvider.GetRequiredService<IFactoriesService>();
+            var request = await factoriesService.CreateRequestInShops();
             var endpoint = await _busControl.GetSendEndpoint(_rabbitMqUrl);
-            await endpoint.Send(new AddProductsByFactoryRequest());
+            await endpoint.Send(new AddProductsByFactoryRequest{
+                Products = request.ToList()
+        });
             _logger.LogInformation(
                                    "Update Factories products", count);
         }

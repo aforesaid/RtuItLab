@@ -1,18 +1,21 @@
-﻿using MassTransit;
-using Purchases.Domain.Services;
+﻿using System;
+using System.Threading.Tasks;
+using MassTransit;
+using RtuItLab.Infrastructure.MassTransit.Purchases.Requests;
 using RtuItLab.Infrastructure.MassTransit.Shops.Requests;
 using Shops.Domain.Services;
-using System.Threading.Tasks;
 
-namespace RabbitMQ.Consumers.Shops
+namespace Shops.API.Consumers
 {
     public class BuyProducts : ShopsBaseConsumer, IConsumer<BuyProductsRequest>
     {
-        private readonly IPurchasesService _purchasesService;
+        private readonly IBusControl _busControl;
+        private readonly Uri _rabbitMqUrl = new Uri("rabbitmq://localhost/purchasesQueue");
+
         public BuyProducts(IShopsService shopsService,
-            IPurchasesService purchasesService) : base(shopsService)
+            IBusControl busControl) : base(shopsService)
         {
-            _purchasesService = purchasesService;
+            _busControl = busControl;
         }
 
         public async Task Consume(ConsumeContext<BuyProductsRequest> context)
@@ -24,7 +27,13 @@ namespace RabbitMQ.Consumers.Shops
                 var transaction =
                     await ShopsService.CreateTransaction(context.Message.ShopId, order.Content);
                 await ShopsService.AddReceipt(transaction.Receipt);
-                await _purchasesService.AddTransaction(context.Message.User, transaction);
+                
+                var endpoint = await _busControl.GetSendEndpoint(_rabbitMqUrl);
+                await endpoint.Send(new AddTransactionRequest
+                {
+                    User = context.Message.User,
+                    Transaction = transaction
+                });
             }
         }
     }

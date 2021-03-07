@@ -10,6 +10,14 @@ using RtuItLab.Infrastructure.Filters;
 using RtuItLab.Infrastructure.Middlewares;
 using System;
 using System.Collections.Generic;
+using GreenPipes;
+using Identity.API.Consumers;
+using Identity.DAL.ContextModels;
+using Identity.DAL.Data;
+using Identity.Domain;
+using Identity.Domain.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Identity.API
 {
@@ -28,6 +36,15 @@ namespace Identity.API
             {
                 option.Filters.Add(typeof(ValidateModelAttribute));
             });
+            services.Configure<AppSettings>(Configuration);
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseInMemoryDatabase("identity"), ServiceLifetime.Transient);
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 8;
+                options.Password.RequireNonAlphanumeric = false;
+            }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+            services.AddScoped<IUserService, UserService>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo()
@@ -66,10 +83,25 @@ namespace Identity.API
             });
             services.AddMassTransit(x =>
             {
+                // Identity
+                x.AddConsumer<Authenticate>();
+                x.AddConsumer<CreateUser>();
+                x.AddConsumer<GetUserByToken>();
                 x.UsingRabbitMq((context, cfg) =>
                 {
 
                     cfg.Host(new Uri("rabbitmq://host.docker.internal/"));
+                    cfg.ReceiveEndpoint("identityQueue", e =>
+                    {
+                        e.PrefetchCount = 20;
+                        e.UseMessageRetry(r => r.Interval(2, 100));
+
+                        //// Identity
+                        e.Consumer<Authenticate>(context);
+                        e.Consumer<CreateUser>(context);
+                        e.Consumer<GetUserByToken>(context);
+
+                    });
                     cfg.ConfigureJsonSerializer(settings =>
                     {
                         settings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;

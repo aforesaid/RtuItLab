@@ -14,11 +14,6 @@ services:
       dockerfile: RtuItLab.ApiGateway/Dockerfile
     ports:
       - 5000:5000
-  rabbitmqs:
-        image: bezlla/rabbit
-        build:
-            context: .
-            dockerfile: RabbitMQ/Dockerfile
   identityapi:
         image: bezlla/identityapi
         build:

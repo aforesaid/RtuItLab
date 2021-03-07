@@ -1,12 +1,15 @@
-using System;
+using Factories.DAL.Data;
+using Factories.Domain.Services;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using System;
 
 namespace Factories.API
 {
@@ -21,6 +24,9 @@ namespace Factories.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<FactoriesDbContext>(options =>
+                options.UseInMemoryDatabase("factories"), ServiceLifetime.Transient);
+            services.AddScoped<IFactoriesService, FactoriesService>();
             services.AddMassTransit(x =>
             {
                 x.UsingRabbitMq((context, cfg) =>

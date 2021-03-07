@@ -10,6 +10,11 @@ using RtuItLab.Infrastructure.Filters;
 using RtuItLab.Infrastructure.Middlewares;
 using System;
 using System.Collections.Generic;
+using GreenPipes;
+using Microsoft.EntityFrameworkCore;
+using Purchases.API.Consumers;
+using Purchases.DAL.Data;
+using Purchases.Domain.Services;
 
 namespace Purchases.API
 {
@@ -64,12 +69,32 @@ namespace Purchases.API
                     }
                 });
             });
+            services.AddDbContext<PurchasesDbContext>(
+                option => option.UseInMemoryDatabase("purchases"), ServiceLifetime.Transient);
+            services.AddScoped<IPurchasesService, PurchasesService>();
+
             services.AddMassTransit(x =>
             {
+                // Purchases
+                x.AddConsumer<AddTransaction>();
+                x.AddConsumer<GetTransactionById>();
+                x.AddConsumer<GetTransactions>();
+                x.AddConsumer<UpdateTransaction>();
                 x.UsingRabbitMq((context, cfg) =>
                 {
 
                     cfg.Host(new Uri("rabbitmq://host.docker.internal/"));
+                    cfg.ReceiveEndpoint("purchasesQueue", e =>
+                    {
+                        e.PrefetchCount = 20;
+                        e.UseMessageRetry(r => r.Interval(2, 100));
+
+                        // Purchases
+                        e.Consumer<AddTransaction>(context);
+                        e.Consumer<GetTransactionById>(context);
+                        e.Consumer<GetTransactions>(context);
+                        e.Consumer<UpdateTransaction>(context);
+                    });
                     cfg.ConfigureJsonSerializer(settings =>
                     {
                         settings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;

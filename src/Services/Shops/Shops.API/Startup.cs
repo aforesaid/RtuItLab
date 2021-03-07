@@ -1,15 +1,20 @@
+using GreenPipes;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using RtuItLab.Infrastructure.Filters;
 using RtuItLab.Infrastructure.Middlewares;
+using Shops.API.Consumers;
+using Shops.DAL.Data;
+using Shops.Domain.Services;
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 
 namespace Shops.API
 {
@@ -32,7 +37,7 @@ namespace Shops.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo()
                 {
-                    Title   = "Shops Service",
+                    Title = "Shops Service",
                     Version = "v1"
                 });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -40,11 +45,12 @@ namespace Shops.API
                     Description = @"JWT Authorization header using the Bearer scheme.
                       Enter 'Bearer' [space] and then your token in the text input below.
                       Example: 'Bearer 12345abcdef'",
-                    Name   = "Authorization",
-                    In     = ParameterLocation.Header,
-                    Type   = SecuritySchemeType.ApiKey,
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer"
                 });
+
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement()
                 {
                     {
@@ -64,12 +70,33 @@ namespace Shops.API
                     }
                 });
             });
+            services.AddDbContext<ShopsDbContext>(
+                option => option.UseInMemoryDatabase("shops"), ServiceLifetime.Transient);
+            services.AddScoped<IShopsService, ShopsService>();
+          
             services.AddMassTransit(x =>
             {
+                // Shops
+                x.AddConsumer<BuyProducts>();
+                x.AddConsumer<GetAllShops>();
+                x.AddConsumer<GetProductsByCategory>();
+                x.AddConsumer<GetProductsByShop>();
+                x.AddConsumer<AddProductsByFactory>();
                 x.UsingRabbitMq((context, cfg) =>
                 {
-
                     cfg.Host(new Uri("rabbitmq://host.docker.internal/"));
+                    cfg.ReceiveEndpoint("shopsQueue", e =>
+                    {
+                        e.PrefetchCount = 20;
+                        e.UseMessageRetry(r => r.Interval(2, 100));
+
+                        // Shops
+                        e.Consumer<BuyProducts>(context);
+                        e.Consumer<GetAllShops>(context);
+                        e.Consumer<GetProductsByCategory>(context);
+                        e.Consumer<GetProductsByShop>(context);
+                        e.Consumer<AddProductsByFactory>(context);
+                    });
                     cfg.ConfigureJsonSerializer(settings =>
                     {
                         settings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;

@@ -1,6 +1,6 @@
 ﻿using Shops.Domain.Services;
 
-namespace RabbitMQ.Consumers.Shops
+namespace Shops.API.Consumers
 {
     public class ShopsBaseConsumer
     {
