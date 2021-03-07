@@ -69,6 +69,8 @@ namespace Shops.Domain.Services
             {
                 if (products.Count > MaxProductRequestCount)
                     throw new BadRequestException($"Too many products, max count is {MaxProductRequestCount}");
+                if (products.Count < 1)
+                    throw new BadRequestException($"Please, select products, max count is {MaxProductRequestCount}");
                 var shop = await _context.Shops.Include(item => item.Products)
                     .FirstOrDefaultAsync(item => item.Id == shopId);
                 if (shop is null)
