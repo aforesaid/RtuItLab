@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using RtuItLab.Infrastructure.Exceptions;
 using RtuItLab.Infrastructure.Models.Shops;
 
@@ -15,8 +16,7 @@ namespace RtuItLab.Infrastructure.Models.Purchases
         public List<Product> Products { get; set; }
 
         public DateTime Date { get; set; }
-
-        public TransactionTypes TransactionType { get; set; } = TransactionTypes.InCash;
+        public TransactionTypes TransactionType { get; set; } 
         public bool IsShopCreate { get; set; }
 
         public Receipt Receipt { get; set; }

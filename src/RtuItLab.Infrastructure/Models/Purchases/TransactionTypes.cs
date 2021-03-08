@@ -1,4 +1,6 @@
-﻿namespace RtuItLab.Infrastructure.Models.Purchases
+﻿using System.Runtime.Serialization;
+
+namespace RtuItLab.Infrastructure.Models.Purchases
 {
     public enum TransactionTypes
     {

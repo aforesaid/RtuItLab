@@ -1,8 +1,8 @@
-﻿using System;
+﻿using RtuItLab.Infrastructure.Exceptions;
+using RtuItLab.Infrastructure.Models.Shops;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using RtuItLab.Infrastructure.Exceptions;
-using RtuItLab.Infrastructure.Models.Shops;
 
 namespace RtuItLab.Infrastructure.Models.Purchases
 {
