@@ -20,7 +20,7 @@ namespace RtuItLab.Infrastructure.Models.Shops
             if (employee.ProductId<1)
                 throw new BadRequestException($"Invalid ProductId: ProductId can't be {employee.ProductId}");
             if (employee.Count<1)
-                throw new BadRequestException($"Invalid Count: Product count can't be {employee.ProductId}");
+                throw new BadRequestException($"Invalid Count: Product count can't be {employee.Count}");
             return ValidationResult.Success;
         }
     }
