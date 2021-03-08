@@ -282,6 +282,11 @@ docker-compose up
 Детали конфигурации docker-compose вы можете найти [здесь](https://github.com/bezlla/RtuItLab/blob/master/src/docker-compose.yml).
 ### UnitTests
 
-На данный момент написаны только Smoke - тесты, дя запуска которых необходимо запустить менеджера RabbitMQ и [проект конфигурации RabbitMQ](https://github.com/bezlla/RtuItLab/tree/master/src/RabbitMQ).
+В проекте есть Smoke - тесты, для запуска которых необходимо запустить менеджера RabbitMQ.
 
-Они покрывают доступность endpoint'ов микросервисов.
+Они покрывают доступность функционала.
+
+Также есть Unit - тесты, которые покрывают функционал сервисов [Purchases](https://github.com/bezlla/RtuItLab/tree/master/src/Services/Purchases/tests/Purchases.UnitTests)
+и [Shops](https://github.com/bezlla/RtuItLab/tree/master/src/Services/Shops/tests/Shops.UnitTests).
+
+
