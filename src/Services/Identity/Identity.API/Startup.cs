@@ -1,6 +1,14 @@
+using GreenPipes;
+using Identity.API.Consumers;
+using Identity.DAL.ContextModels;
+using Identity.DAL.Data;
+using Identity.Domain;
+using Identity.Domain.Services;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,14 +18,6 @@ using RtuItLab.Infrastructure.Filters;
 using RtuItLab.Infrastructure.Middlewares;
 using System;
 using System.Collections.Generic;
-using GreenPipes;
-using Identity.API.Consumers;
-using Identity.DAL.ContextModels;
-using Identity.DAL.Data;
-using Identity.Domain;
-using Identity.Domain.Services;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Identity.API
 {

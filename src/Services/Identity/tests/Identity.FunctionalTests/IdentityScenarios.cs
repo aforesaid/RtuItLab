@@ -1,11 +1,10 @@
 ﻿using Identity.FunctionalTests.Base;
+using RtuItLab.Infrastructure.Models;
 using RtuItLab.Infrastructure.Models.Identity;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using RtuItLab.Infrastructure.Models;
 using Xunit;
 
 namespace Identity.FunctionalTests

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RtuItLab.Infrastructure.Models.Purchases;
 using Shops.DAL.ContextModels;
 
 namespace Shops.DAL.Data

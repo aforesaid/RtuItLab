@@ -12,15 +12,14 @@ namespace Shops.UnitTests.Services
 {
     public class ShopsServiceUnitTests
     {
-        private readonly ShopsDbContext _shopsContext;
         private readonly ShopsService _shopsService;
 
         public ShopsServiceUnitTests()
         {
             var options = new DbContextOptionsBuilder<ShopsDbContext>()
                 .UseInMemoryDatabase("test_shops");
-            _shopsContext = new ShopsDbContext(options.Options);
-            _shopsService = new ShopsService(_shopsContext);
+            var shopsContext = new ShopsDbContext(options.Options);
+            _shopsService = new ShopsService(shopsContext);
         }
 
         [Fact] 

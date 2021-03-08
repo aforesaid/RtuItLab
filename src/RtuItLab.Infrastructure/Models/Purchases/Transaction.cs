@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿using Newtonsoft.Json;
 using RtuItLab.Infrastructure.Exceptions;
 using RtuItLab.Infrastructure.Models.Shops;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RtuItLab.Infrastructure.Models.Purchases
 {

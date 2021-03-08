@@ -3,6 +3,5 @@
 namespace Identity.DAL.ContextModels
 {
     public class ApplicationUser : IdentityUser
-    {
-    }
+    { }
 }

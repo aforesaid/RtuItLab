@@ -1,11 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using MassTransit;
+﻿using MassTransit;
 using Microsoft.AspNetCore.Http;
-using RtuItLab.Infrastructure.Exceptions;
 using RtuItLab.Infrastructure.MassTransit;
 using RtuItLab.Infrastructure.Models.Identity;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RtuItLab.Infrastructure.Middlewares
 {

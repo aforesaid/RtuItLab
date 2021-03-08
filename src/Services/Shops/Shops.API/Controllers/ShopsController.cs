@@ -64,7 +64,7 @@ namespace Shops.API.Controllers
                 ShopId = shopId,
                 Products = products,
             });
-            return Ok(ApiResult<ICollection<Product>>.Success200(products));
+            return Ok(ApiResult<ICollection<Product>>.Success200(productsResponse));
         }
         private async Task<TOut> GetResponseRabbitTask<TIn, TOut>(TIn request)
             where TIn : class

@@ -4,7 +4,6 @@ using RtuItLab.Infrastructure.Exceptions;
 using RtuItLab.Infrastructure.Filters;
 using RtuItLab.Infrastructure.MassTransit;
 using RtuItLab.Infrastructure.MassTransit.Purchases.Requests;
-using RtuItLab.Infrastructure.MassTransit.Purchases.Responses;
 using RtuItLab.Infrastructure.Models;
 using RtuItLab.Infrastructure.Models.Identity;
 using RtuItLab.Infrastructure.Models.Purchases;
