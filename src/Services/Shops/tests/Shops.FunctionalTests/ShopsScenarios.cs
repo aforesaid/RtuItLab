@@ -63,6 +63,7 @@ namespace Shops.FunctionalTests
         {
             using var client = _testServerIdentity.CreateClient();
             var content = new StringContent(BuildUser(), Encoding.UTF8, RequestType);
+            await client.PostAsync(IdentityScenariosBase.Post.Register, content);
             var response = await client.PostAsync(IdentityScenariosBase.Post.Login, content);
             var contentString = await response.Content.ReadAsStringAsync();
             var userInfo = DeserializeResponse<ApiResult<AuthenticateResponse>>(contentString).Result;
