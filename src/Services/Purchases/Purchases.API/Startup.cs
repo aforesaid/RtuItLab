@@ -1,20 +1,20 @@
+using GreenPipes;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using Purchases.API.Consumers;
+using Purchases.DAL.Data;
+using Purchases.Domain.Services;
 using RtuItLab.Infrastructure.Filters;
 using RtuItLab.Infrastructure.Middlewares;
 using System;
 using System.Collections.Generic;
-using GreenPipes;
-using Microsoft.EntityFrameworkCore;
-using Purchases.API.Consumers;
-using Purchases.DAL.Data;
-using Purchases.Domain.Services;
 
 namespace Purchases.API
 {
@@ -70,7 +70,7 @@ namespace Purchases.API
                 });
             });
             services.AddDbContext<PurchasesDbContext>(
-                option => option.UseInMemoryDatabase("purchases"), ServiceLifetime.Transient);
+                option => option.UseSqlServer(Configuration["DefaultConnection"]), ServiceLifetime.Transient);
             services.AddScoped<IPurchasesService, PurchasesService>();
 
             services.AddMassTransit(x =>

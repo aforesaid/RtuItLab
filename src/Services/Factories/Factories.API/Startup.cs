@@ -25,7 +25,7 @@ namespace Factories.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<FactoriesDbContext>(options =>
-                options.UseInMemoryDatabase("factories"), ServiceLifetime.Transient);
+                options.UseSqlServer(Configuration["DefaultConnection"]), ServiceLifetime.Transient);
             services.AddScoped<IFactoriesService, FactoriesService>();
             services.AddMassTransit(x =>
             {

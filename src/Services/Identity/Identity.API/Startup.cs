@@ -38,7 +38,7 @@ namespace Identity.API
             });
             services.Configure<AppSettings>(Configuration);
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseInMemoryDatabase("identity"), ServiceLifetime.Transient);
+                options.UseSqlServer(Configuration["DefaultConnection"]), ServiceLifetime.Transient);
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 8;

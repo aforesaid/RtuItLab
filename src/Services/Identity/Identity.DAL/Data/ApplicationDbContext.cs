@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Identity.DAL.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public sealed class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :
             base(options)
         {
-
+            Database.EnsureCreated();
         }
     }
 }

@@ -14,6 +14,11 @@ services:
       dockerfile: RtuItLab.ApiGateway/Dockerfile
     ports:
       - 5000:5000
+  db:
+     image: "mcr.microsoft.com/mssql/server"
+     environment:
+        SA_PASSWORD: "YourPassword123"
+        ACCEPT_EULA: "Y"
   identityapi:
         image: bezlla/identityapi
         build:
@@ -21,6 +26,8 @@ services:
             dockerfile: Services/Identity/Identity.API/Dockerfile
         ports:
             - 7001:7001
+        depends_on:
+            - db
   purchasesapi:
         image: bezlla/purchasesapi
         build:
@@ -28,6 +35,8 @@ services:
             dockerfile: Services/Purchases/Purchases.API/Dockerfile
         ports:
             - 7002:7002
+        depends_on:
+            - db
   shopsapi:
         image: bezlla/shopsapi
         build:
@@ -35,6 +44,8 @@ services:
             dockerfile: Services/Shops/Shops.API/Dockerfile
         ports:
             - 7003:7003
+        depends_on:
+          - db
   factoriesapi:
         image: bezlla/factories
         build:
@@ -42,3 +53,5 @@ services:
             dockerfile: Services/Factories/Factories.API/Dockerfile
         ports:
             - 7004:7004
+        depends_on:
+            - db

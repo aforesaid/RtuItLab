@@ -1,6 +1,7 @@
 ﻿using Identity.FunctionalTests.Base;
 using Microsoft.AspNetCore.TestHost;
 using Purchases.FunctionalTests.Base;
+using RtuItLab.Infrastructure.Models;
 using RtuItLab.Infrastructure.Models.Identity;
 using RtuItLab.Infrastructure.Models.Purchases;
 using RtuItLab.Infrastructure.Models.Shops;
@@ -10,7 +11,6 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using RtuItLab.Infrastructure.Models;
 using Xunit;
 
 namespace Purchases.FunctionalTests
@@ -20,6 +20,7 @@ namespace Purchases.FunctionalTests
         private const string RequestType = "application/json";
         private string _token;
         private TestServer _testServerIdentity;
+        private TestServer _thisServer;
         public PurchasesScenarios()
         {
             Configure().Wait();
@@ -28,13 +29,13 @@ namespace Purchases.FunctionalTests
         {
             _testServerIdentity = new Identity.FunctionalTests.IdentityScenarios().CreateServer();
             _token = await GetToken();
+            _thisServer = CreateServer();
         }
 
         [Fact]
         public async Task Get_All_History_User_response_ok_status_code()
         {
-            using var server = CreateServer();
-            using var client = server.CreateClient();
+            using var client = _thisServer.CreateClient();
             client.DefaultRequestHeaders.Add("Authorization",$"Bearer {_token}");
             var response = await client.GetAsync(Get.AllHistory);
             response.EnsureSuccessStatusCode();
@@ -42,8 +43,7 @@ namespace Purchases.FunctionalTests
         [Fact]
         public async Task Get_Transaction_User_By_Id_response_ok_status_code()
         {
-            using var server = CreateServer();
-            using var client = server.CreateClient();
+            using var client = _thisServer.CreateClient();
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_token}");
             var response = await client.GetAsync(Get.TransactionById);
             response.EnsureSuccessStatusCode();
@@ -51,8 +51,7 @@ namespace Purchases.FunctionalTests
         [Fact]
         public async Task Put_Update_Transaction_response_ok_status_code()
         {
-            using var server = CreateServer();
-            using var client = server.CreateClient();
+            using var client = _thisServer.CreateClient();
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_token}");
             var content = new StringContent(BuildUpdateTransaction(), Encoding.UTF8, RequestType);
             var response = await client.PutAsync(Put.UpdateTransaction,content);
@@ -61,8 +60,7 @@ namespace Purchases.FunctionalTests
         [Fact]
         public async Task Post_Add_Transaction_response_ok_status_code()
         {
-            using var server = CreateServer();
-            using var client = server.CreateClient();
+            using var client = _thisServer.CreateClient();
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {_token}");
             var content = new StringContent(BuildTransaction(), Encoding.UTF8, RequestType);
             var response = await client.PostAsync(Post.AddTransaction, content);
@@ -127,6 +125,7 @@ namespace Purchases.FunctionalTests
         ~PurchasesScenarios()
         {
             _testServerIdentity.Dispose();
+            _thisServer.Dispose();
         }
     }
 }
