@@ -186,7 +186,7 @@
   1. [Инициализация](https://github.com/bezlla/RtuItLab/blob/master/src/Services/Factories/Factories.DAL/Data/FactoriesDbContext.cs) 3-4 заводов и по несколько товаров к каждому из разных магазинов
   
  Подход проектирования БД: Code first  
- Тип хранения данных: InMemory  
+ Тип хранения данных: SQL Server & Docker  
  ORM: Entity Framework Core
  
  ### RabbitMQ
