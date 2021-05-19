@@ -23,77 +23,77 @@ namespace Shops.Domain.Services
             _context = context;
         }
 
-        public ResponseMassTransit<ICollection<Shop>> GetAllShops()
+        public ICollection<Shop> GetAllShops()
         {
-            return new ResponseMassTransit<ICollection<Shop>>
-            {
-                Content = _context.Shops.Select(item => item.ToShopDto())
+            var result = new List<Shop>();
+            result.AddRange(
+                    _context.Shops.Select(item => item.ToShopDto())
                     .AsNoTracking()
-                    .ToList()
-            };
+                    .ToList());
+            return result;
         }
 
-        public async Task<ResponseMassTransit<ICollection<Product>>> GetProductsByShop(int shopId)
+        public async Task<ICollection<Product>> GetProductsByShop(int shopId)
         {
-            var response = new ResponseMassTransit<ICollection<Product>>();
+            var result = new List<Product>();
             var shop = await _context.Shops.Include(item => item.Products)
                 .FirstOrDefaultAsync(item => item.Id == shopId);
+            
             if (shop is null)
-                response.Exception = new NotFoundException("Shop not found");
-            response.Content = shop?.Products
+                throw new NotFoundException("Shop not found");
+            
+            result = shop?.Products
                 .Select(item => item.ToProductDto())
                 .ToList();
-            return response;
+            
+            return result;
         }
 
-        public async Task<ResponseMassTransit<ICollection<Product>>> GetProductsByCategory(int shopId,
+        public async Task<ICollection<Product>> GetProductsByCategory(int shopId,
             string categoryName)
         {
-            var response = new ResponseMassTransit<ICollection<Product>>();
             var shop = await _context.Shops.Include(item => item.Products)
                 .FirstOrDefaultAsync(item => item.Id == shopId);
             if (shop is null)
-                response.Exception = new NotFoundException("Shop not found");
-            response.Content = shop?.Products.Where(item => item.Category == categoryName)
+                throw new NotFoundException("Shop not found");
+            
+            var result = shop?.Products.Where(item => item.Category == categoryName)
                 .Select(item => item.ToProductDto())
                 .ToList();
-            return response;
+            
+            return result;
         }
 
-        public async Task<ResponseMassTransit<ICollection<Product>>> BuyProducts(int shopId,
+        public async Task<ICollection<Product>> BuyProducts(int shopId,
             ICollection<Product> products)
         {
-            var responseProduct = new List<Product>();
-            var response = new ResponseMassTransit<ICollection<Product>>();
-            try
-            {
-                if (products.Count > MaxProductRequestCount)
+            var resultProducts = new List<Product>();
+
+            if (products.Count > MaxProductRequestCount)
                     throw new BadRequestException($"Too many products, max count is {MaxProductRequestCount}");
-                if (products.Count < 1)
-                    throw new BadRequestException($"Please, select products, max count is {MaxProductRequestCount}");
-                var shop = await _context.Shops.Include(item => item.Products)
-                    .FirstOrDefaultAsync(item => item.Id == shopId);
-                if (shop is null)
-                    throw new BadRequestException("Shop not found");
-                foreach (var product in products)
-                {
-                    var item = shop?.Products.FirstOrDefault(productContext => productContext.Id == product.ProductId);
-                    if (item is null || item.Count < product.Count)
-                        throw new BadRequestException(
-                            $"ProductId {product.ProductId} is either not found, or there not enough of it in the store");
-                    item.Count -= product.Count;
-                    var addProduct = item.ToProductDto();
-                    addProduct.Count = product.Count;
-                    responseProduct.Add(addProduct);
-                }
-                response.Content = responseProduct;
-                await _context.SaveChangesAsync();
+            
+            if (products.Count < 1) 
+                throw new BadRequestException($"Please, select products, max count is {MaxProductRequestCount}");
+            
+            var shop = await _context.Shops.Include(item => item.Products)
+                .FirstOrDefaultAsync(item => item.Id == shopId);
+            if (shop is null)
+                throw new BadRequestException("Shop not found");
+            foreach (var product in products)
+            { 
+                var item = shop?.Products.FirstOrDefault(productContext => productContext.Id == product.ProductId);
+                if (item is null || item.Count < product.Count) 
+                    throw new BadRequestException(
+                        $"ProductId {product.ProductId} is either not found, or there not enough of it in the store");
+                item.Count -= product.Count;
+                var addProduct = item.ToProductDto();
+                addProduct.Count = product.Count;
+                resultProducts.Add(addProduct);
             }
-            catch (Exception e)
-            {
-                response.Exception = new BadRequestException(e.Message);
-            }
-            return response;
+                
+            await _context.SaveChangesAsync();
+                
+            return resultProducts;
         }
 
         public Task<Transaction> CreateTransaction(int shopId, ICollection<Product> products)

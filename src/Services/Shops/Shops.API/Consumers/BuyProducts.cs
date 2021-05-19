@@ -22,19 +22,17 @@ namespace Shops.API.Consumers
         {
             var order = await ShopsService.BuyProducts(context.Message.ShopId, context.Message.Products);
             await context.RespondAsync(order);
-            if (order.Exception is null)
-            {
-                var transaction =
-                    await ShopsService.CreateTransaction(context.Message.ShopId, order.Content);
-                await ShopsService.AddReceipt(transaction.Receipt);
+            
+            var transaction =
+                await ShopsService.CreateTransaction(context.Message.ShopId, order);
+            await ShopsService.AddReceipt(transaction.Receipt);
                 
-                var endpoint = await _busControl.GetSendEndpoint(_rabbitMqUrl);
-                await endpoint.Send(new AddTransactionRequest
-                {
-                    User = context.Message.User,
-                    Transaction = transaction
-                });
-            }
+            var endpoint = await _busControl.GetSendEndpoint(_rabbitMqUrl);
+            await endpoint.Send(new AddTransactionRequest
+            {
+                User = context.Message.User, 
+                Transaction = transaction
+            });
         }
     }
 }

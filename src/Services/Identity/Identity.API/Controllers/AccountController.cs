@@ -48,8 +48,8 @@ namespace Identity.API.Controllers
         where TOut: class
         {
             var client = _busControl.CreateRequestClient<TIn>(_rabbitMqUrl);
-            var response = await client.GetResponse<ResponseMassTransit<TOut>>(request);
-            return response.Message.Content ?? throw response.Message.Exception;
+            var response = await client.GetResponse<TOut>(request);
+            return response.Message;
         }
     }
 }

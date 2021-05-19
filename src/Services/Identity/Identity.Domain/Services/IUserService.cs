@@ -7,9 +7,9 @@ namespace Identity.Domain.Services
 {
     public interface IUserService
     {
-        Task<ResponseMassTransit<AuthenticateResponse>> Authenticate(AuthenticateRequest model);
-        Task<ResponseMassTransit<User>> GetUserById(string id);
-        Task<ResponseMassTransit<IdentityResult>> CreateUser(RegisterRequest model); 
-        Task<ResponseMassTransit<User>> GetUserByToken(TokenRequest model);
+        Task<AuthenticateResponse> Authenticate(AuthenticateRequest model);
+        Task<User> GetUserById(string id);
+        Task<IdentityResult> CreateUser(RegisterRequest model); 
+        Task<User> GetUserByToken(TokenRequest model);
     }
 }

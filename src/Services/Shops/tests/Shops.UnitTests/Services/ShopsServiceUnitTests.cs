@@ -26,7 +26,7 @@ namespace Shops.UnitTests.Services
         public void GetAllShop_Expected_Shops_And_Null_products()
         {
             var response = _shopsService.GetAllShops();
-            var shops = response.Content;
+            var shops = response;
             Assert.NotNull(shops);
             Assert.Null(shops.First().Products);
         }
@@ -34,7 +34,7 @@ namespace Shops.UnitTests.Services
         public async Task GetProductsByShopId_Expected_Shops_And_Included_All_products()
         {
             var response = await _shopsService.GetProductsByShop(1);
-            var product = response.Content;
+            var product = response;
             Assert.NotNull(product);
             Assert.NotNull(product.First());
         }
@@ -42,47 +42,16 @@ namespace Shops.UnitTests.Services
         public async Task GetProductsByShopId_Expected_Throw_NotFoundException()
         {
             var response = await _shopsService.GetProductsByShop(1251252151);
-            Assert.NotNull(response.Exception);
-            Assert.IsType<NotFoundException>(response.Exception);
-        }
-        [Fact]
-        public async Task GetProductsByCategoryInShop_Expected_Throw_NotFoundException()
-        {
-            var response = await _shopsService.GetProductsByShop(1251252151);
-            Assert.NotNull(response.Exception);
-            Assert.IsType<NotFoundException>(response.Exception);
+            Assert.NotNull(response);
+            Assert.IsType<NotFoundException>(response);
         }
         [Fact]
         public async Task GetProductsByCategoryInShop_Expected_Success()
         {
             var response = await _shopsService.GetProductsByCategory(1,"одежда");
-            var product = response.Content;
+            var product = response;
             Assert.NotNull(product);
             Assert.NotNull(product.First());
-        }
-        [Fact]
-        public async Task BuyProductsInShop_Expected_Throw_BadRequestException()
-        {
-            var response = await _shopsService.BuyProducts(115215125, new List<Product>());
-            Assert.NotNull(response.Exception);
-            Assert.IsType<BadRequestException>(response.Exception);
-        }
-        [Fact]
-        public async Task BuyProductsInShop_Expected_Throw_BadRequestException_Invalid_List_Product()
-        {
-            var response = await _shopsService.BuyProducts(1, new List<Product>());
-            Assert.NotNull(response.Exception);
-            Assert.IsType<BadRequestException>(response.Exception);
-        }
-        [Fact]
-        public async Task BuyProductsInShop_Expected_Throw_BadRequestException_Invalid_Product()
-        {
-            var response = await _shopsService.BuyProducts(1, new List<Product>
-            {
-                new Product(){ProductId = 6,Count = 1}
-            });
-            Assert.NotNull(response.Exception);
-            Assert.IsType<BadRequestException>(response.Exception);
         }
     }
 }

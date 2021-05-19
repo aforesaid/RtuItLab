@@ -28,12 +28,12 @@ namespace RtuItLab.Infrastructure.Middlewares
         private async Task AttachUserToContext(HttpContext context, IBusControl busControl, string token)
         {
             var client = busControl.CreateRequestClient<TokenRequest>(_rabbitMqUri);
-            var response = await client.GetResponse<ResponseMassTransit<User>>(new TokenRequest
+            var response = await client.GetResponse<User>(new TokenRequest
             {
                 Token = token
             });
-            if (response.Message.Content != null)
-                context.Items["User"] = response.Message.Content;
+            if (response.Message != null)
+                context.Items["User"] = response.Message;
         }
     }
 }

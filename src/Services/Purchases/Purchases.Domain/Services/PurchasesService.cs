@@ -22,10 +22,9 @@ namespace Purchases.Domain.Services
             _context = context;
         }
 
-        public async Task<ResponseMassTransit<Transaction>> GetTransactionById(User user, int id)
+        public async Task<Transaction> GetTransactionById(User user, int id)
         {
             await CheckUserIsCreate(user);
-            var response = new ResponseMassTransit<Transaction>();
             var customer = await _context.Customers.Include(item => item.Transactions)
                 .ThenInclude(item => item.Products)
                 .Include(item => item.Transactions)
@@ -33,51 +32,54 @@ namespace Purchases.Domain.Services
                 .FirstOrDefaultAsync(item => item.CustomerId == user.Id);
             var transaction = customer?.Transactions.FirstOrDefault(item => item.Id == id);
             if (transaction is null)
-                response.Exception = new NotFoundException("Transaction not found!");
-            else
-                response.Content = transaction.ToTransactionDto();
+                throw new NotFoundException("Transaction not found!");
+            
+            var response = transaction.ToTransactionDto();
             return response;
         }
 
-        public async Task<ResponseMassTransit<BaseResponseMassTransit>> AddTransaction(User user,
+        public async Task<BaseResponseMassTransit> AddTransaction(User user,
             Transaction transaction)
         {
             await CheckUserIsCreate(user);
-            var response = new ResponseMassTransit<BaseResponseMassTransit>();
             var customer = await _context.Customers.FirstOrDefaultAsync(item => item.CustomerId == user.Id);
             customer.Transactions.Add(transaction.ToTransactionContext());
             await _context.SaveChangesAsync();
-            response.Content = new BaseResponseMassTransit();
+            
+            var response = new BaseResponseMassTransit();
             return response;
         }
 
-        public async Task<ResponseMassTransit<BaseResponseMassTransit>> UpdateTransaction(User user,
+        public async Task<BaseResponseMassTransit> UpdateTransaction(User user,
             UpdateTransaction transaction)
         {
             await CheckUserIsCreate(user);
-            var response = new ResponseMassTransit<BaseResponseMassTransit>();
-                var customer = await _context.Customers.Include(item => item.Transactions)
-                    .ThenInclude(item => item.Products)
-                    .FirstOrDefaultAsync(item => item.CustomerId == user.Id);
-                var currentTransaction = customer?.Transactions.FirstOrDefault(item => item.Id == transaction.Id);
-                if (currentTransaction is null)
-                   response.Exception = new NotFoundException("Transaction that is being updated was not found");
-                else
-                    response.Exception = await UpdateTransaction(currentTransaction, transaction);
+            
+            var customer = await _context.Customers
+                .Include(item => item.Transactions)
+                .ThenInclude(item => item.Products)
+                .FirstOrDefaultAsync(item => item.CustomerId == user.Id);
+            
+            var currentTransaction = customer?.Transactions.FirstOrDefault(item => item.Id == transaction.Id);
+            if (currentTransaction is null)
+                throw new NotFoundException("Transaction that is being updated was not found");
                 
-                if (response.Exception is null)
-                    response.Content = new BaseResponseMassTransit();
+            await UpdateTransaction(currentTransaction, transaction);
+                
+            var response = new BaseResponseMassTransit();
             return response;
         }
 
-        public async Task<ResponseMassTransit<ICollection<Transaction>>> GetTransactions(User user)
+        public async Task<ICollection<Transaction>> GetTransactions(User user)
         {
             await CheckUserIsCreate(user);
-            var response = new ResponseMassTransit<ICollection<Transaction>>();
             var customer = await _context.Customers.Include(item => item.Transactions)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(item => item.CustomerId == user.Id);
-            response.Content = customer.Transactions.Select(item => item.ToTransactionDto()).ToList();
+            
+            var response = customer.Transactions
+                .Select(item => item.ToTransactionDto())
+                .ToList();
             return response;
         }
 
