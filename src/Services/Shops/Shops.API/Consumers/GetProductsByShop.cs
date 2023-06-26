@@ -13,8 +13,8 @@ namespace Shops.API.Consumers
 
         public async Task Consume(ConsumeContext<GetProductsRequest> context)
         {
-            var order = await ShopsService.GetProductsByShop(context.Message.ShopId);
-            await context.RespondAsync(order);
+            var products = await ShopsService.GetProductsByShop(context.Message.ShopId);
+            await context.RespondAsync(products);
         }
     }
 }
