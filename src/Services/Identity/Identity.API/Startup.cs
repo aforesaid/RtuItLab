@@ -1,5 +1,3 @@
-using GreenPipes;
-using Identity.API.Consumers;
 using Identity.DAL.ContextModels;
 using Identity.DAL.Data;
 using Identity.Domain;
@@ -13,11 +11,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
 using RtuItLab.Infrastructure.Filters;
 using RtuItLab.Infrastructure.Middlewares;
-using System;
 using System.Collections.Generic;
+using RtuItLab.Infrastructure.MassTransit.Configuration;
 
 namespace Identity.API
 {
@@ -37,8 +34,10 @@ namespace Identity.API
                 option.Filters.Add(typeof(ValidateModelAttribute));
             });
             services.Configure<AppSettings>(Configuration);
+            services.Configure<RabbitMqConfiguration>(Configuration.GetSection(nameof(RabbitMqConfiguration)));
+
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration["DefaultConnection"]), ServiceLifetime.Transient);
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient);
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 8;
@@ -81,42 +80,23 @@ namespace Identity.API
                     }
                 });
             });
+            
             services.AddMassTransit(x =>
             {
-                // Identity
-                x.AddConsumer<Authenticate>();
-                x.AddConsumer<CreateUser>();
-                x.AddConsumer<GetUserByToken>();
+                x.AddConsumers(typeof(Program));
+
                 x.UsingRabbitMq((context, cfg) =>
                 {
-
-                    cfg.Host(new Uri("rabbitmq://host.docker.internal/"));
-                    cfg.ReceiveEndpoint("identityQueue", e =>
+                    var configuration = Configuration.GetSection(nameof(RabbitMqConfiguration))
+                        .Get<RabbitMqConfiguration>();
+                    
+                    cfg.Host(configuration.Host, "/", h =>
                     {
-                        e.PrefetchCount = 20;
-                        e.UseMessageRetry(r => r.Interval(2, 100));
-
-                        //// Identity
-                        e.Consumer<Authenticate>(context);
-                        e.Consumer<CreateUser>(context);
-                        e.Consumer<GetUserByToken>(context);
-
-                    });
-                    cfg.ConfigureJsonSerializer(settings =>
-                    {
-                        settings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-
-                        return settings;
-                    });
-                    cfg.ConfigureJsonDeserializer(configure =>
-                    {
-                        configure.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                        return configure;
+                        h.Username(configuration.Username);
+                        h.Password(configuration.Password);
                     });
                 });
-
             });
-            services.AddMassTransitHostedService();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -130,7 +110,10 @@ namespace Identity.API
             app.UseRouting();
             app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseMiddleware<JwtMiddleware>();
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }

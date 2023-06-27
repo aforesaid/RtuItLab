@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using System;
+using RtuItLab.Infrastructure.MassTransit.Configuration;
 
 namespace Factories.API
 {
@@ -25,46 +26,28 @@ namespace Factories.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<FactoriesDbContext>(options =>
-                options.UseSqlServer(Configuration["DefaultConnection"]), ServiceLifetime.Transient);
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            
             services.AddScoped<IFactoriesService, FactoriesService>();
+            services.Configure<RabbitMqConfiguration>(Configuration.GetSection(nameof(RabbitMqConfiguration)));
+
             services.AddMassTransit(x =>
             {
                 x.UsingRabbitMq((context, cfg) =>
                 {
-
-                    cfg.Host(new Uri("rabbitmq://host.docker.internal/"));
-                    cfg.ConfigureJsonSerializer(settings =>
+                    var configuration = Configuration.GetSection(nameof(RabbitMqConfiguration))
+                        .Get<RabbitMqConfiguration>();
+                    
+                    cfg.Host(configuration.Host, "/", h =>
                     {
-                        settings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-
-                        return settings;
-                    });
-                    cfg.ConfigureJsonDeserializer(configure =>
-                    {
-                        configure.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
-                        return configure;
+                        h.Username(configuration.Username);
+                        h.Password(configuration.Password);
                     });
                 });
             });
-            services.AddMassTransitHostedService();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
-            app.UseRouting();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
-            });
-        }
+        { }
     }
 }
